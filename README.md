@@ -1,2 +1,2 @@
-# pigeon-users-registration-service
-pigeon's users registration service
+# pigeon-security-service
+pigeon's security service
