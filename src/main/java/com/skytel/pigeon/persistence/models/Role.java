@@ -10,7 +10,7 @@ import java.util.Collection;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "roles")
+@Table(name = "users_roles")
 public class Role {
 
     @Id
@@ -21,7 +21,7 @@ public class Role {
     private Collection<User> users;
 
     @ManyToMany
-    @JoinTable(name = "role_privileges", joinColumns = @JoinColumn(name = "role", referencedColumnName = "id"),
+    @JoinTable(name = "roles_privileges", joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
     inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id"))
     private Collection<Privilege> privileges;
 
@@ -29,6 +29,7 @@ public class Role {
 
     public Role(final String name) {
 
+        super();
         this.name = name;
     }
 
@@ -44,27 +45,23 @@ public class Role {
 
     @Override
     public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
+
+        if (this == obj) { return true; }
+        if (obj == null) { return false; }
+        if (getClass() != obj.getClass()) { return false; }
+
         final Role role = (Role) obj;
-        if (!getName().equals(role.getName())) {
-            return false;
-        }
+        if (!getName().equals(role.getName())) { return false; }
+
         return true;
     }
 
     @Override
     public String toString() {
+
         final StringBuilder builder = new StringBuilder();
         builder.append("Role [name=").append(name).append("]").append("[id=").append(id).append("]");
+
         return builder.toString();
     }
-
 }

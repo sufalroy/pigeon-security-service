@@ -1,5 +1,6 @@
 package com.skytel.pigeon.persistence.models;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +18,6 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
-
 
 @Data
 @Entity
@@ -65,7 +65,7 @@ public class User {
     @JoinTable(name = "users_roles", 
     joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), 
     inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private Set<Role> roles = new HashSet<>();
+    private Collection<Role> roles;
 
     public User() {
         
@@ -92,7 +92,7 @@ public class User {
         if (getClass() != obj.getClass()) { return false; }
 
         final User user = (User) obj;
-        if (!getEmail().equals(user.getEmail())) {
+        if (!getEmail().equals(user.getEmail()) && !getCompany().equals(user.getCompany())) {
             return false;
         }
 
