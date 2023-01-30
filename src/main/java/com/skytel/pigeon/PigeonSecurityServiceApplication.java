@@ -1,4 +1,4 @@
-package com.skytel.pigeonsecurityservice;
+package com.skytel.pigeon;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
