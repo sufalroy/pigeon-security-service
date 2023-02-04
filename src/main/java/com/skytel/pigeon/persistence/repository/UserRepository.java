@@ -5,12 +5,10 @@ import org.springframework.stereotype.Repository;
 
 import com.skytel.pigeon.persistence.models.User;
 
-import java.util.Optional;
-
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    public Optional<User> findByEmail(String email);
+    public User findByEmail(String email);
 
     public Boolean existsByEmail(String email);
 
