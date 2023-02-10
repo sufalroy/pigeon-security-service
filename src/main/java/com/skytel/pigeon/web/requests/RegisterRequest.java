@@ -4,7 +4,7 @@ import com.skytel.pigeon.validators.PasswordMatches;
 import com.skytel.pigeon.validators.ValidEmail;
 import com.skytel.pigeon.validators.ValidPassword;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -12,43 +12,43 @@ import lombok.Data;
 @PasswordMatches
 public class RegisterRequest {
 
-        @NotBlank
+        @NotNull
         @Size(min = 1, max = 20)
         private String firstname;
-        @NotBlank
+        @NotNull
         @Size(min = 1, max = 20)
         private String lastname;
-        @NotBlank
+        @NotNull
         @Size(min = 1, max = 20)
         private String company;
         @ValidEmail
-        @NotBlank
+        @NotNull
         @Size(min = 1)
         private String email;
-        @NotBlank
+        @NotNull
         @Size(min = 1, max = 20)
         private String phone;
         @ValidPassword
         private String password;
-        @NotBlank
+        @NotNull
         @Size(min = 1)
         private String matchingPassword;
-        @NotBlank
+        @NotNull
         @Size(min = 1)
         private String reference;
-        @NotBlank
+        @NotNull
         @Size(min = 1)
         private String postal;
-        @NotBlank
+        @NotNull
         @Size(min = 1)
         private String street;
-        @NotBlank
+        @NotNull
         @Size(min = 1)
         private String state;
-        @NotBlank
+        @NotNull
         @Size(min = 1)
         private String city;
-        @NotBlank
+        @NotNull
         @Size(min = 1)
         private String country;
         private boolean isUsing2FA;

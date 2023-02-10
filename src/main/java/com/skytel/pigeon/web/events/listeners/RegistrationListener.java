@@ -12,7 +12,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -36,7 +35,6 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         this.confirmRegistration(event);
     }
 
-    @Async
     private void confirmRegistration(final OnRegistrationCompleteEvent event) {
 
         final User user = event.getUser();

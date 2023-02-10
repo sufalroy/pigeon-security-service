@@ -38,9 +38,22 @@ public class MvcConfiguration implements WebMvcConfigurer {
     public void addViewControllers(final ViewControllerRegistry registry) {
 
         registry.addViewController("/").setViewName("forward:/login");
+        registry.addViewController("/loginRememberMe");
+        registry.addViewController("/customLogin");
         registry.addViewController("/registration.html");
-        registry.addViewController("/emailError");
+        registry.addViewController("/logout.html");
+        registry.addViewController("/homepage.html");
+        registry.addViewController("/expiredAccount.html");
+        registry.addViewController("/emailError.html");
+        registry.addViewController("/home.html");
+        registry.addViewController("/invalidSession.html");
+        registry.addViewController("/admin.html");
         registry.addViewController("/successRegister.html");
+        registry.addViewController("/forgetPassword.html");
+        registry.addViewController("/updatePassword.html");
+        registry.addViewController("/changePassword.html");
+        registry.addViewController("/users.html");
+        registry.addViewController("/qrcode.html");
     }
 
     @Override
