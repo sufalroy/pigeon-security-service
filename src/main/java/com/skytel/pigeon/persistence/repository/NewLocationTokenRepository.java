@@ -9,7 +9,7 @@ import com.skytel.pigeon.persistence.models.UserLocation;
 @Repository
 public interface NewLocationTokenRepository extends JpaRepository<NewLocationToken, Long> {
 
-    NewLocationToken findByToken(String token);
+    public NewLocationToken findByToken(String token);
 
-    NewLocationToken findByUserLocation(UserLocation userLocation);
+    public NewLocationToken findByUserLocation(UserLocation userLocation);
 }

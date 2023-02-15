@@ -10,5 +10,5 @@ import com.skytel.pigeon.persistence.models.DeviceMetadata;
 @Repository
 public interface DeviceMetadataRepository extends JpaRepository<DeviceMetadata, Long> {
    
-    List<DeviceMetadata> findByUserId(Long userId);
+    public List<DeviceMetadata> findByUserId(Long userId);
 }

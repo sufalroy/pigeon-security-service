@@ -14,15 +14,15 @@ import com.skytel.pigeon.persistence.models.User;
 @Repository
 public interface PasswordResetTokenRepository extends JpaRepository<PasswordResetToken, Long> {
     
-    PasswordResetToken findByToken(String token);
+    public PasswordResetToken findByToken(String token);
 
-    PasswordResetToken findByUser(User user);
+    public PasswordResetToken findByUser(User user);
     
-    Stream<PasswordResetToken> findAllByExpiryDateLessThan(Date now);
+    public Stream<PasswordResetToken> findAllByExpiryDateLessThan(Date now);
 
-    void deleteByExpiryDateLessThan(Date now);
+    public void deleteByExpiryDateLessThan(Date now);
 
     @Modifying
     @Query("delete from PasswordResetToken t where t.expiryDate <= ?1")
-    void deleteAllExpiredSince(Date now);
+    public void deleteAllExpiredSince(Date now);
 }

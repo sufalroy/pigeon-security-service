@@ -2,14 +2,11 @@ package com.skytel.pigeon.persistence.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Collection;
 
 @Data
-@NoArgsConstructor
 @Entity
-@Table(name = "roles_privileges")
 public class Privilege {
 
     @Id
@@ -20,6 +17,10 @@ public class Privilege {
 
     @ManyToMany(mappedBy = "privileges")
     private Collection<Role> roles;
+
+    public Privilege() {
+        super();
+    }
 
     public Privilege(final String name) {
 

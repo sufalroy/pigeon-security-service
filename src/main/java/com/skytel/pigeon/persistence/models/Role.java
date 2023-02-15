@@ -2,14 +2,11 @@ package com.skytel.pigeon.persistence.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Collection;
 
 @Data
-@NoArgsConstructor
 @Entity
-@Table(name = "users_roles")
 public class Role {
 
     @Id
@@ -24,6 +21,10 @@ public class Role {
     private Collection<Privilege> privileges;
 
     private String name;
+
+    public Role() {
+        super();
+    }
 
     public Role(final String name) {
 
