@@ -10,11 +10,11 @@ import com.skytel.pigeon.exceptions.UnusualLocationException;
 import com.skytel.pigeon.persistence.models.NewLocationToken;
 import com.skytel.pigeon.services.IUserService;
 
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 @Component
 public class DifferentLocationChecker implements UserDetailsChecker {
-    
+
     @Autowired
     private IUserService userService;
 
@@ -26,13 +26,15 @@ public class DifferentLocationChecker implements UserDetailsChecker {
 
     @Override
     public void check(UserDetails userDetails) {
-        
+
         final String ip = getClientIP();
 
         final NewLocationToken token = userService.isNewLoginLocation(userDetails.getUsername(), ip);
-        if(token != null) {
-            final String url = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
-            eventPublisher.publishEvent(new OnDifferentLocationLoginEvent(request.getLocale(), userDetails.getUsername(), ip, token, url));
+        if (token != null) {
+            final String url = "http://" + request.getServerName() + ":" + request.getServerPort()
+                    + request.getContextPath();
+            eventPublisher.publishEvent(
+                    new OnDifferentLocationLoginEvent(request.getLocale(), userDetails.getUsername(), ip, token, url));
 
             throw new UnusualLocationException("unusual location");
         }
@@ -41,7 +43,7 @@ public class DifferentLocationChecker implements UserDetailsChecker {
     private String getClientIP() {
 
         final String xfHeader = request.getHeader("X-Forwarded-For");
-        if(xfHeader == null || xfHeader.isEmpty() || !xfHeader.contains(request.getRemoteAddr())) {
+        if (xfHeader == null || xfHeader.isEmpty() || !xfHeader.contains(request.getRemoteAddr())) {
             return request.getRemoteAddr();
         }
 

@@ -10,7 +10,7 @@ import org.springframework.web.client.RestOperations;
 
 import com.skytel.pigeon.exceptions.ReCaptchaInvalidException;
 
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 public abstract class AbstractCaptchaService implements ICaptchaService {
 

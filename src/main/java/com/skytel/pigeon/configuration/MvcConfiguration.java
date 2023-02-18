@@ -27,19 +27,21 @@ import com.skytel.pigeon.validators.EmailValidator;
 import com.skytel.pigeon.validators.PasswordMatchesValidator;
 
 @Configuration
-@ComponentScan(basePackages = {"com.skytel.pigeon.web"})
+@ComponentScan(basePackages = { "com.skytel.pigeon.web" })
 @EnableWebMvc
 public class MvcConfiguration implements WebMvcConfigurer {
 
     @Autowired
     private MessageSource messageSource;
 
+    public MvcConfiguration() {
+        super();
+    }
+
     @Override
     public void addViewControllers(final ViewControllerRegistry registry) {
 
         registry.addViewController("/").setViewName("forward:/login");
-        registry.addViewController("/loginRememberMe");
-        registry.addViewController("/customLogin");
         registry.addViewController("/registration.html");
         registry.addViewController("/logout.html");
         registry.addViewController("/homepage.html");
@@ -58,19 +60,16 @@ public class MvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public void configureDefaultServletHandling(final DefaultServletHandlerConfigurer configurer) {
-
         configurer.enable();
     }
 
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-
         registry.addResourceHandler("/resources/**").addResourceLocations("/", "/resources/");
     }
 
     @Override
     public void addInterceptors(final InterceptorRegistry registry) {
-
         final LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
         localeChangeInterceptor.setParamName("lang");
         registry.addInterceptor(localeChangeInterceptor);
@@ -78,7 +77,6 @@ public class MvcConfiguration implements WebMvcConfigurer {
 
     @Bean
     public LocaleResolver localeResolver() {
-
         final CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
         cookieLocaleResolver.setDefaultLocale(Locale.ENGLISH);
         return cookieLocaleResolver;
@@ -86,35 +84,29 @@ public class MvcConfiguration implements WebMvcConfigurer {
 
     @Bean
     public EmailValidator usernameValidator() {
-
         return new EmailValidator();
     }
 
     @Bean
     public PasswordMatchesValidator passwordMatchesValidator() {
-
         return new PasswordMatchesValidator();
     }
 
     @Bean
     @ConditionalOnMissingBean(RequestContextListener.class)
     public RequestContextListener requestContextListener() {
-
         return new RequestContextListener();
     }
 
     @Override
     public Validator getValidator() {
-
         LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
         validator.setValidationMessageSource(messageSource);
-
         return validator;
     }
 
     @Bean
     WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> enableDefaultServlet() {
-
         return (factory) -> factory.setRegisterDefaultServlet(true);
     }
 }

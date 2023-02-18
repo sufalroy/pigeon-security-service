@@ -11,13 +11,13 @@ import com.skytel.pigeon.web.requests.Password;
 import com.skytel.pigeon.web.requests.RegisterRequest;
 import com.skytel.pigeon.web.utility.GenericResponse;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
-
 import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -137,10 +137,12 @@ public class AuthenticationRestController {
     @PostMapping("/update/2fa")
     public GenericResponse modifyUser2FA(@RequestParam("use2FA") final boolean use2FA)
             throws UnsupportedEncodingException {
+
         final User user = userService.updateUser2FA(use2FA);
         if (use2FA) {
             return new GenericResponse(userService.generateQRUrl(user));
         }
+
         return null;
     }
 

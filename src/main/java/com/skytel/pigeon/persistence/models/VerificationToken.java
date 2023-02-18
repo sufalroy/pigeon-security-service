@@ -1,6 +1,6 @@
 package com.skytel.pigeon.persistence.models;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Data;
 
 import java.util.Calendar;

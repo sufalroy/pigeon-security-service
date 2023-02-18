@@ -2,6 +2,8 @@ package com.skytel.pigeon.exceptions;
 
 public final class ReCaptchaInvalidException extends RuntimeException {
 
+    private static final long serialVersionUID = 1L;
+
     public ReCaptchaInvalidException() {
         super();
     }

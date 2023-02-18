@@ -23,7 +23,7 @@ import com.skytel.pigeon.persistence.models.DeviceMetadata;
 import com.skytel.pigeon.persistence.models.User;
 import com.skytel.pigeon.persistence.repository.DeviceMetadataRepository;
 
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import ua_parser.Client;
 import ua_parser.Parser;
 

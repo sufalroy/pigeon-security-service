@@ -51,6 +51,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                 Arrays.asList(readPrivilege, writePrivilege, passwordPrivilege));
         final List<Privilege> userPrivileges = new ArrayList<>(Arrays.asList(readPrivilege, passwordPrivilege));
         final Role adminRole = createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
+        
         createRoleIfNotFound("ROLE_USER", userPrivileges);
 
         createUserIfNotFound("test@test.com",
@@ -115,8 +116,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             user.setLastname(lastName);
             user.setCompany(company);
             user.setEmail(email);
-            user.setPassword(encoder.encode(password));
             user.setPhone(phone);
+            user.setPassword(encoder.encode(password));
             user.setReference(reference);
             user.setPostal(postalCode);
             user.setStreet(streetAddress);

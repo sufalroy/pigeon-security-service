@@ -18,10 +18,9 @@ import org.springframework.stereotype.Component;
 import com.skytel.pigeon.persistence.models.User;
 import com.skytel.pigeon.services.DeviceService;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @Component("pigeonAuthenticationSuccessHandler")
 public class PigeonSimpleUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
@@ -40,8 +39,9 @@ public class PigeonSimpleUrlAuthenticationSuccessHandler implements Authenticati
     private Environment environment;
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-            Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(final HttpServletRequest request,
+            final HttpServletResponse response,
+            final Authentication authentication) throws IOException {
 
         handle(request, response, authentication);
         final HttpSession session = request.getSession(false);
@@ -54,12 +54,11 @@ public class PigeonSimpleUrlAuthenticationSuccessHandler implements Authenticati
             } else {
                 username = authentication.getName();
             }
-
             LoggedUser user = new LoggedUser(username, activeUserStore);
             session.setAttribute("user", user);
         }
-
         clearAuthenticationAttributes(request);
+
         loginNotification(authentication, request);
     }
 
@@ -73,18 +72,17 @@ public class PigeonSimpleUrlAuthenticationSuccessHandler implements Authenticati
             logger.error("An error occurred while verifying device or location", e);
             throw new RuntimeException(e);
         }
+
     }
 
     protected void handle(final HttpServletRequest request, final HttpServletResponse response,
             final Authentication authentication) throws IOException {
-
         final String targetUrl = determineTargetUrl(authentication);
 
         if (response.isCommitted()) {
             logger.debug("Response has already been committed. Unable to redirect to " + targetUrl);
             return;
         }
-
         redirectStrategy.sendRedirect(request, response, targetUrl);
     }
 
@@ -92,9 +90,7 @@ public class PigeonSimpleUrlAuthenticationSuccessHandler implements Authenticati
 
         boolean isUser = false;
         boolean isAdmin = false;
-
         final Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-
         for (final GrantedAuthority grantedAuthority : authorities) {
             if (grantedAuthority.getAuthority().equals("READ_PRIVILEGE")) {
                 isUser = true;
@@ -126,19 +122,21 @@ public class PigeonSimpleUrlAuthenticationSuccessHandler implements Authenticati
         if (session == null) {
             return;
         }
-
         session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
     }
 
     public void setRedirectStrategy(final RedirectStrategy redirectStrategy) {
+
         this.redirectStrategy = redirectStrategy;
     }
 
     protected RedirectStrategy getRedirectStrategy() {
+
         return redirectStrategy;
     }
 
     private boolean isGeoIpLibEnabled() {
+
         return Boolean.parseBoolean(environment.getProperty("geo.ip.lib.enabled"));
     }
 }

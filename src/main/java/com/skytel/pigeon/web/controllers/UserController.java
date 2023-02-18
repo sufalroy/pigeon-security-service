@@ -12,7 +12,7 @@ import com.skytel.pigeon.services.IUserService;
 
 @Controller
 public class UserController {
-    
+
     @Autowired
     ActiveUserStore activeUserStore;
 
@@ -21,13 +21,17 @@ public class UserController {
 
     @GetMapping("/loggedUsers")
     public String getLoggedUsers(final Locale locale, final Model model) {
+
         model.addAttribute("users", activeUserStore.getUsers());
+
         return "users";
     }
 
     @GetMapping("/loggedUsersFromSessionRegistry")
     public String getLoggedUsersFromSessionRegistry(final Locale locale, final Model model) {
+
         model.addAttribute("users", userService.getUsersFromSessionRegistry());
+
         return "users";
     }
 }

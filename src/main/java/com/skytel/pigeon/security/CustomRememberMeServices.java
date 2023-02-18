@@ -18,8 +18,8 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import com.skytel.pigeon.persistence.models.User;
 import com.skytel.pigeon.persistence.repository.UserRepository;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class CustomRememberMeServices extends PersistentTokenBasedRememberMeServices {
 

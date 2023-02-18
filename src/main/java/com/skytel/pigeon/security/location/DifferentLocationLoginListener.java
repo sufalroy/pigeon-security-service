@@ -35,7 +35,6 @@ public class DifferentLocationLoginListener implements ApplicationListener<OnDif
                 event.getLocale());
 
         final SimpleMailMessage email = new SimpleMailMessage();
-
         email.setTo(recipientAddress);
         email.setSubject(subject);
         email.setText(message);
@@ -43,5 +42,4 @@ public class DifferentLocationLoginListener implements ApplicationListener<OnDif
         System.out.println(message);
         mailSender.send(email);
     }
-
 }

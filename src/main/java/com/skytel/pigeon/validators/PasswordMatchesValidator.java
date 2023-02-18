@@ -2,8 +2,8 @@ package com.skytel.pigeon.validators;
 
 import com.skytel.pigeon.web.requests.RegisterRequest;
 
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 
 public class PasswordMatchesValidator implements ConstraintValidator<PasswordMatches, Object> {
 

@@ -54,11 +54,10 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         final String message = messages.getMessage("message.regSuccLink", null,
                 "You registered successfully. To confirm your registration, please click on the below link.",
                 event.getLocale());
-
         final SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipientAddress);
         email.setSubject(subject);
-        email.setText(message + "\r\n" + confirmationUrl);
+        email.setText(message + " \r\n" + confirmationUrl);
         email.setFrom(environment.getProperty("support.email"));
 
         return email;

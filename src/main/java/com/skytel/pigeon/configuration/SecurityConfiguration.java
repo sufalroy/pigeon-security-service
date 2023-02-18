@@ -59,17 +59,19 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.authorizeHttpRequests()
-                .requestMatchers("/login*", "/logout*", "/signin/**", "/signup/**", "/customLogin",
-                        "/user/registration*", "/registrationConfirm*", "/expiredAccount*",
-                        "/registration*", "/badUser*", "/user/resendRegistrationToken*", "/forgetPassword*",
+        http.csrf()
+                .disable()
+                .authorizeRequests()
+                .antMatchers("/login*", "/logout*", "/user/registration*", "/registrationConfirm*",
+                        "/expiredAccount*", "/registration*", "/badUser*", "/user/resendRegistrationToken*",
+                        "/forgetPassword*",
                         "/user/resetPassword*", "/user/savePassword*", "/updatePassword*", "/user/changePassword*",
                         "/emailError*", "/resources/**", "/successRegister*", "/qrcode*", "/user/enableNewLoc*")
 
                 .permitAll()
-                .requestMatchers("/invalidSession*")
+                .antMatchers("/invalidSession*")
                 .anonymous()
-                .requestMatchers("/user/updatePassword*")
+                .antMatchers("/user/updatePassword*")
                 .hasAuthority("CHANGE_PASSWORD_PRIVILEGE")
                 .anyRequest()
                 .hasAuthority("READ_PRIVILEGE")
@@ -106,7 +108,7 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+    public AuthenticationManager authManager(HttpSecurity http) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
                 .authenticationProvider(authProvider())
                 .build();
@@ -114,8 +116,7 @@ public class SecurityConfiguration {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-
-        return (web) -> web.ignoring().requestMatchers("/resources/**", "/h2/**");
+        return (web) -> web.ignoring().antMatchers("/resources/**", "/h2/**");
     }
 
     @Bean
@@ -153,20 +154,20 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public DefaultWebSecurityExpressionHandler webSecurityExpressionHandler() {
-        DefaultWebSecurityExpressionHandler expressionHandler = new DefaultWebSecurityExpressionHandler();
-        expressionHandler.setRoleHierarchy(roleHierarchy());
-
-        return expressionHandler;
-    }
-
-    @Bean
     public RoleHierarchy roleHierarchy() {
 
         RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
         String hierarchy = "ROLE_ADMIN > ROLE_USER";
         roleHierarchy.setHierarchy(hierarchy);
         return roleHierarchy;
+    }
+
+    @Bean
+    public DefaultWebSecurityExpressionHandler webSecurityExpressionHandler() {
+        DefaultWebSecurityExpressionHandler expressionHandler = new DefaultWebSecurityExpressionHandler();
+        expressionHandler.setRoleHierarchy(roleHierarchy());
+
+        return expressionHandler;
     }
 
     @Bean

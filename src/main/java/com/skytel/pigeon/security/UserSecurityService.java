@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.skytel.pigeon.persistence.models.PasswordResetToken;
 import com.skytel.pigeon.persistence.repository.PasswordResetTokenRepository;
 
-import jakarta.transaction.Transactional;
+import javax.transaction.Transactional;
 
 @Service
 @Transactional
@@ -28,11 +28,12 @@ public class UserSecurityService implements ISecurityUserService {
     }
 
     private boolean isTokenFound(PasswordResetToken passwordResetToken) {
+
         return passwordResetToken != null;
     }
 
     private boolean isTokenExpired(PasswordResetToken passwordResetToken) {
-        
+
         final Calendar cal = Calendar.getInstance();
         return passwordResetToken.getExpiryDate().before(cal.getTime());
     }

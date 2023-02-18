@@ -1,7 +1,6 @@
 package com.skytel.pigeon.services;
 
 import com.maxmind.geoip2.DatabaseReader;
-import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.skytel.pigeon.exceptions.UserAlreadyExistException;
 import com.skytel.pigeon.persistence.models.NewLocationToken;
 import com.skytel.pigeon.persistence.models.PasswordResetToken;
@@ -16,7 +15,7 @@ import com.skytel.pigeon.persistence.repository.UserRepository;
 import com.skytel.pigeon.persistence.repository.VerificationTokenRepository;
 import com.skytel.pigeon.web.requests.RegisterRequest;
 
-import jakarta.transaction.Transactional;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
@@ -27,11 +26,9 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.URLEncoder;
-import java.net.UnknownHostException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -111,13 +108,14 @@ public class UserService implements IUserService {
         if (token != null) {
             return token.getUser();
         }
+
         return null;
     }
 
     @Override
-    public VerificationToken getVerificationToken(final String verificationToken) {
+    public VerificationToken getVerificationToken(final String VerificationToken) {
 
-        return tokenRepository.findByToken(verificationToken);
+        return tokenRepository.findByToken(VerificationToken);
     }
 
     @Override
@@ -135,26 +133,28 @@ public class UserService implements IUserService {
             tokenRepository.delete(verificationToken);
         }
 
-        final PasswordResetToken passwordResetToken = passwordResetTokenRepository.findByUser(user);
+        final PasswordResetToken passwordToken = passwordResetTokenRepository.findByUser(user);
 
-        if (passwordResetToken != null) {
-            passwordResetTokenRepository.delete(passwordResetToken);
+        if (passwordToken != null) {
+            passwordResetTokenRepository.delete(passwordToken);
         }
+
         userRepository.delete(user);
     }
 
     @Override
     public void createVerificationTokenForUser(final User user, final String token) {
 
-        final VerificationToken uToken = new VerificationToken(token, user);
-        tokenRepository.save(uToken);
+        final VerificationToken myToken = new VerificationToken(token, user);
+        tokenRepository.save(myToken);
     }
 
     @Override
-    public VerificationToken generateNewVerificationToken(final String existVerifyToken) {
+    public VerificationToken generateNewVerificationToken(final String existingVerificationToken) {
 
-        VerificationToken vToken = tokenRepository.findByToken(existVerifyToken);
-        vToken.updateToken(UUID.randomUUID().toString());
+        VerificationToken vToken = tokenRepository.findByToken(existingVerificationToken);
+        vToken.updateToken(UUID.randomUUID()
+                .toString());
         vToken = tokenRepository.save(vToken);
 
         return vToken;
@@ -163,8 +163,8 @@ public class UserService implements IUserService {
     @Override
     public void createPasswordResetTokenForUser(final User user, final String token) {
 
-        final PasswordResetToken uToken = new PasswordResetToken(token, user);
-        passwordResetTokenRepository.save(uToken);
+        final PasswordResetToken myToken = new PasswordResetToken(token, user);
+        passwordResetTokenRepository.save(myToken);
     }
 
     @Override
@@ -175,16 +175,19 @@ public class UserService implements IUserService {
 
     @Override
     public PasswordResetToken getPasswordResetToken(final String token) {
+
         return passwordResetTokenRepository.findByToken(token);
     }
 
     @Override
     public Optional<User> getUserByPasswordResetToken(final String token) {
+
         return Optional.ofNullable(passwordResetTokenRepository.findByToken(token).getUser());
     }
 
     @Override
     public Optional<User> getUserByID(final long id) {
+
         return userRepository.findById(id);
     }
 
@@ -205,17 +208,17 @@ public class UserService implements IUserService {
     public String validateVerificationToken(String token) {
 
         final VerificationToken verificationToken = tokenRepository.findByToken(token);
-
         if (verificationToken == null) {
             return TOKEN_INVALID;
         }
 
         final User user = verificationToken.getUser();
         final Calendar cal = Calendar.getInstance();
-        if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
-
+        if ((verificationToken.getExpiryDate()
+                .getTime()
+                - cal.getTime()
+                        .getTime()) <= 0) {
             tokenRepository.delete(verificationToken);
-
             return TOKEN_EXPIRED;
         }
 
@@ -247,7 +250,8 @@ public class UserService implements IUserService {
     }
 
     private boolean emailExists(final String email) {
-        return userRepository.existsByEmail(email);
+
+        return userRepository.findByEmail(email) != null;
     }
 
     @Override
@@ -255,7 +259,8 @@ public class UserService implements IUserService {
 
         return sessionRegistry.getAllPrincipals()
                 .stream()
-                .filter((u) -> !sessionRegistry.getAllSessions(u, false).isEmpty())
+                .filter((u) -> !sessionRegistry.getAllSessions(u, false)
+                        .isEmpty())
                 .map(o -> {
                     if (o instanceof User) {
                         return ((User) o).getEmail();
@@ -274,31 +279,35 @@ public class UserService implements IUserService {
 
         try {
             final InetAddress ipAddress = InetAddress.getByName(ip);
-            final String country = databaseReader.country(ipAddress).getCountry().getName();
+            final String country = databaseReader.country(ipAddress)
+                    .getCountry()
+                    .getName();
             System.out.println(country + "====****");
             final User user = userRepository.findByEmail(username);
-            final UserLocation location = userLocationRepository.findByCountryAndUser(country, user);
-            if ((location == null) || !location.isEnabled()) {
+            final UserLocation loc = userLocationRepository.findByCountryAndUser(country, user);
+            if ((loc == null) || !loc.isEnabled()) {
                 return createNewLocationToken(country, user);
             }
         } catch (final Exception e) {
             return null;
         }
+
         return null;
     }
 
     @Override
     public String isValidNewLocationToken(String token) {
 
-        final NewLocationToken locationToken = newLocationTokenRepository.findByToken(token);
-        if (locationToken == null) {
+        final NewLocationToken locToken = newLocationTokenRepository.findByToken(token);
+        if (locToken == null) {
             return null;
         }
-        UserLocation userLocation = locationToken.getUserLocation();
-        userLocation.setEnabled(true);
-        userLocation = userLocationRepository.save(userLocation);
-        newLocationTokenRepository.delete(locationToken);
-        return userLocation.getCountry();
+        UserLocation userLoc = locToken.getUserLocation();
+        userLoc.setEnabled(true);
+        userLoc = userLocationRepository.save(userLoc);
+        newLocationTokenRepository.delete(locToken);
+
+        return userLoc.getCountry();
     }
 
     @Override
@@ -309,21 +318,14 @@ public class UserService implements IUserService {
         }
 
         try {
-
             final InetAddress ipAddress = InetAddress.getByName(ip);
             final String country = databaseReader.country(ipAddress)
                     .getCountry()
                     .getName();
-
-            UserLocation location = new UserLocation(country, user);
-            location.setEnabled(true);
-            userLocationRepository.save(location);
-
-        } catch (final UnknownHostException e) {
-            throw new RuntimeException(e);
-        } catch (final IOException e) {
-            throw new RuntimeException(e);
-        } catch (final GeoIp2Exception e) {
+            UserLocation loc = new UserLocation(country, user);
+            loc.setEnabled(true);
+            userLocationRepository.save(loc);
+        } catch (final Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -334,10 +336,11 @@ public class UserService implements IUserService {
     }
 
     private NewLocationToken createNewLocationToken(String country, User user) {
-        UserLocation location = new UserLocation(country, user);
-        location = userLocationRepository.save(location);
 
-        final NewLocationToken token = new NewLocationToken(UUID.randomUUID().toString(), location);
+        UserLocation loc = new UserLocation(country, user);
+        loc = userLocationRepository.save(loc);
+
+        final NewLocationToken token = new NewLocationToken(UUID.randomUUID().toString(), loc);
 
         return newLocationTokenRepository.save(token);
     }

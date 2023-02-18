@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ActiveUserStore {
-    
+
     public List<String> users;
 
     public ActiveUserStore() {

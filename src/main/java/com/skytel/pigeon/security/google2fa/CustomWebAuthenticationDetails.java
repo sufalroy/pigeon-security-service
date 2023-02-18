@@ -2,7 +2,7 @@ package com.skytel.pigeon.security.google2fa;
 
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 public class CustomWebAuthenticationDetails extends WebAuthenticationDetails {
 
