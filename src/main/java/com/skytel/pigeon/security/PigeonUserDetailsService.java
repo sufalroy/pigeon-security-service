@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import com.skytel.pigeon.persistence.models.Privilege;
 import com.skytel.pigeon.persistence.models.Role;
 import com.skytel.pigeon.persistence.models.User;
-import com.skytel.pigeon.persistence.repository.UserRepository;
+import com.skytel.pigeon.persistence.repositories.UserRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;

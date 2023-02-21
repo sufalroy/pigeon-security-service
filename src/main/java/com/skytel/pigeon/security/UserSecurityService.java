@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.skytel.pigeon.persistence.models.PasswordResetToken;
-import com.skytel.pigeon.persistence.repository.PasswordResetTokenRepository;
+import com.skytel.pigeon.persistence.repositories.PasswordResetTokenRepository;
 
 import javax.transaction.Transactional;
 

@@ -1,6 +1,6 @@
 package com.skytel.pigeon.tasks;
 
-import com.skytel.pigeon.persistence.repository.VerificationTokenRepository;
+import com.skytel.pigeon.persistence.repositories.VerificationTokenRepository;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;

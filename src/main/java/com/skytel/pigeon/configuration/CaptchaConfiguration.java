@@ -9,9 +9,9 @@ import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-@ComponentScan(basePackages = {"com.skytel.pigeon.captcha"})
+@ComponentScan(basePackages = { "com.skytel.pigeon.captcha" })
 public class CaptchaConfiguration {
-    
+
     @Bean
     public ClientHttpRequestFactory clientHttpRequestFactory() {
 

@@ -7,12 +7,12 @@ import com.skytel.pigeon.persistence.models.PasswordResetToken;
 import com.skytel.pigeon.persistence.models.User;
 import com.skytel.pigeon.persistence.models.UserLocation;
 import com.skytel.pigeon.persistence.models.VerificationToken;
-import com.skytel.pigeon.persistence.repository.NewLocationTokenRepository;
-import com.skytel.pigeon.persistence.repository.PasswordResetTokenRepository;
-import com.skytel.pigeon.persistence.repository.RoleRepository;
-import com.skytel.pigeon.persistence.repository.UserLocationRepository;
-import com.skytel.pigeon.persistence.repository.UserRepository;
-import com.skytel.pigeon.persistence.repository.VerificationTokenRepository;
+import com.skytel.pigeon.persistence.repositories.NewLocationTokenRepository;
+import com.skytel.pigeon.persistence.repositories.PasswordResetTokenRepository;
+import com.skytel.pigeon.persistence.repositories.RoleRepository;
+import com.skytel.pigeon.persistence.repositories.UserLocationRepository;
+import com.skytel.pigeon.persistence.repositories.UserRepository;
+import com.skytel.pigeon.persistence.repositories.VerificationTokenRepository;
 import com.skytel.pigeon.web.requests.RegisterRequest;
 
 import javax.transaction.Transactional;

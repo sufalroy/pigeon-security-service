@@ -1,4 +1,4 @@
-package com.skytel.pigeon.persistence.repository;
+package com.skytel.pigeon.persistence.repositories;
 
 import java.util.Date;
 import java.util.stream.Stream;
@@ -23,6 +23,6 @@ public interface PasswordResetTokenRepository extends JpaRepository<PasswordRese
     public void deleteByExpiryDateLessThan(Date now);
 
     @Modifying
-    @Query("delete from PasswordResetToken t where t.expiryDate <= ?1")
+    @Query(value = "delete from PasswordResetToken t where t.expiryDate <= ?1", nativeQuery = true)
     public void deleteAllExpiredSince(Date now);
 }

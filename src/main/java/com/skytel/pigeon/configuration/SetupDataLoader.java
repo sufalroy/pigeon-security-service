@@ -15,9 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.skytel.pigeon.persistence.models.Privilege;
 import com.skytel.pigeon.persistence.models.Role;
 import com.skytel.pigeon.persistence.models.User;
-import com.skytel.pigeon.persistence.repository.PrivilegeRepository;
-import com.skytel.pigeon.persistence.repository.RoleRepository;
-import com.skytel.pigeon.persistence.repository.UserRepository;
+import com.skytel.pigeon.persistence.repositories.PrivilegeRepository;
+import com.skytel.pigeon.persistence.repositories.RoleRepository;
+import com.skytel.pigeon.persistence.repositories.UserRepository;
 
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
@@ -37,6 +37,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     private PasswordEncoder encoder;
 
     @Override
+    @Transactional
     public void onApplicationEvent(final ContextRefreshedEvent event) {
 
         if (alreadySetup) {
@@ -51,21 +52,21 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                 Arrays.asList(readPrivilege, writePrivilege, passwordPrivilege));
         final List<Privilege> userPrivileges = new ArrayList<>(Arrays.asList(readPrivilege, passwordPrivilege));
         final Role adminRole = createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
-        
+
         createRoleIfNotFound("ROLE_USER", userPrivileges);
 
-        createUserIfNotFound("test@test.com",
-                "Test",
-                "Test",
-                "test",
-                "test",
-                "test",
-                "test",
-                "test",
-                "test",
-                "test",
-                "test",
-                "test",
+        createUserIfNotFound("admin@admin.com",
+                "Admin",
+                "Admin",
+                "admin",
+                "admin",
+                "admin",
+                "admin",
+                "admin",
+                "admin",
+                "admin",
+                "admin",
+                "admin",
                 new ArrayList<>(Arrays.asList(adminRole)));
 
         alreadySetup = true;

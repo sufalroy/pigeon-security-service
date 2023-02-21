@@ -1,7 +1,7 @@
 package com.skytel.pigeon.security.google2fa;
 
 import com.skytel.pigeon.persistence.models.User;
-import com.skytel.pigeon.persistence.repository.UserRepository;
+import com.skytel.pigeon.persistence.repositories.UserRepository;
 import org.jboss.aerogear.security.otp.Totp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;

@@ -13,8 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.skytel.pigeon.exceptions.EmailExistsException;
 import com.skytel.pigeon.persistence.models.User;
 import com.skytel.pigeon.persistence.models.VerificationToken;
-import com.skytel.pigeon.persistence.repository.UserRepository;
-import com.skytel.pigeon.persistence.repository.VerificationTokenRepository;
+import com.skytel.pigeon.persistence.repositories.UserRepository;
+import com.skytel.pigeon.persistence.repositories.VerificationTokenRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -33,19 +33,19 @@ public class UserPersistenceTest {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private Long tokenId;
+    private Long tokenId; 
     private Long userId;
 
     @BeforeEach
-    public void givenUserAndVerificationToken() throws EmailExistsException {
+    public void initUserAndVerificationToken() throws EmailExistsException {
 
         User user = new User();
-        user.setFirstname("Jhon");
+        user.setFirstname("Jon");
         user.setLastname("Doe");
         user.setCompany("E Corporation");
         user.setEmail("test@example.com");
         user.setPhone("2223456780");
-        user.setPassword("secure-passwprd");
+        user.setPassword("secure-password");
         user.setReference("someone");
         user.setPostal("700032");
         user.setStreet("22 B street");
@@ -72,14 +72,14 @@ public class UserPersistenceTest {
     }
 
     @Test
-    public void atContextLoad() {
+    public void whenContextLoad_thenCorrect() {
 
         assertTrue(userRepository.findById(userId).isPresent());
         assertTrue(tokenRepository.findById(tokenId).isPresent());
     }
 
     @Test
-    public void atRemovingTokenThenUser() {
+    public void whenRemovingTokenThenUser_thenCorrect() {
         tokenRepository.deleteById(tokenId);
         userRepository.deleteById(userId);
     }

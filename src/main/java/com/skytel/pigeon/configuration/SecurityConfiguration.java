@@ -36,8 +36,8 @@ import com.skytel.pigeon.security.google2fa.CustomAuthenticationProvider;
 import com.skytel.pigeon.security.google2fa.CustomWebAuthenticationDetailsSource;
 import com.skytel.pigeon.security.location.DifferentLocationChecker;
 
-@Configuration
 @ComponentScan(basePackages = { "com.skytel.pigeon.security" })
+@Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
 

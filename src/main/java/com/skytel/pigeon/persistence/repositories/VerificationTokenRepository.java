@@ -1,4 +1,4 @@
-package com.skytel.pigeon.persistence.repository;
+package com.skytel.pigeon.persistence.repositories;
 
 import com.skytel.pigeon.persistence.models.User;
 import com.skytel.pigeon.persistence.models.VerificationToken;

@@ -21,7 +21,7 @@ import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CityResponse;
 import com.skytel.pigeon.persistence.models.DeviceMetadata;
 import com.skytel.pigeon.persistence.models.User;
-import com.skytel.pigeon.persistence.repository.DeviceMetadataRepository;
+import com.skytel.pigeon.persistence.repositories.DeviceMetadataRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import ua_parser.Client;
