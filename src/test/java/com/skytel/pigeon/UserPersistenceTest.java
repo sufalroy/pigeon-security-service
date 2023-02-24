@@ -15,6 +15,7 @@ import com.skytel.pigeon.persistence.models.User;
 import com.skytel.pigeon.persistence.models.VerificationToken;
 import com.skytel.pigeon.persistence.repositories.UserRepository;
 import com.skytel.pigeon.persistence.repositories.VerificationTokenRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -30,6 +31,9 @@ public class UserPersistenceTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder encoder;
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -37,15 +41,15 @@ public class UserPersistenceTest {
     private Long userId;
 
     @BeforeEach
-    public void initUserAndVerificationToken() throws EmailExistsException {
+    public void init() {
 
         User user = new User();
-        user.setFirstname("Jon");
+        user.setFirstname("John");
         user.setLastname("Doe");
         user.setCompany("E Corporation");
         user.setEmail("test@example.com");
         user.setPhone("2223456780");
-        user.setPassword("secure-password");
+        user.setPassword(encoder.encode("secure-password"));
         user.setReference("someone");
         user.setPostal("700032");
         user.setStreet("22 B street");

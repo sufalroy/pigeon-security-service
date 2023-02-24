@@ -17,12 +17,11 @@ import com.skytel.pigeon.persistence.models.Role;
 import com.skytel.pigeon.persistence.models.User;
 import com.skytel.pigeon.persistence.repositories.UserRepository;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 @Service("userDetailsService")
 @Transactional
-public class PigeonUserDetailsService implements UserDetailsService {
+public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
@@ -30,19 +29,14 @@ public class PigeonUserDetailsService implements UserDetailsService {
     @Autowired
     private LoginAttemptService loginAttemptService;
 
-    @Autowired
-    private HttpServletRequest request;
-
-    public PigeonUserDetailsService() {
+    public MyUserDetailsService() {
         super();
     }
 
     @Override
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
-        
-        final String ip = getClientIP();
-        
-        if (loginAttemptService.isBlocked(ip)) {
+
+        if (loginAttemptService.isBlocked()) {
             throw new RuntimeException("blocked");
         }
 
@@ -89,16 +83,4 @@ public class PigeonUserDetailsService implements UserDetailsService {
         
         return authorities;
     }
-
-    private String getClientIP() {
-
-        final String xfHeader = request.getHeader("X-Forwarded-For");
-        
-        if (xfHeader != null) {
-            return xfHeader.split(",")[0];
-        }
-        
-        return request.getRemoteAddr();
-    }
-
 }

@@ -96,12 +96,14 @@ public class AuthenticationRestController {
     @PostMapping("/resetPassword")
     public GenericResponse resetPassword(final HttpServletRequest request,
             @RequestParam("email") final String userEmail) {
+
         final User user = userService.findUserByEmail(userEmail);
         if (user != null) {
             final String token = UUID.randomUUID().toString();
             userService.createPasswordResetTokenForUser(user, token);
             mailSender.send(constructResetTokenEmail(getUrl(request), request.getLocale(), token, user));
         }
+
         return new GenericResponse(messages.getMessage("message.resetPasswordEmail", null, request.getLocale()));
     }
 
@@ -125,8 +127,13 @@ public class AuthenticationRestController {
 
     @PostMapping("/updatePassword")
     public GenericResponse changeUserPassword(final Locale locale, @Valid Password password) {
-        final User user = userService.findUserByEmail(
-                ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getEmail());
+
+        final User user = userService.findUserByEmail(((User) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal())
+                .getEmail());
+
         if (!userService.checkIfValidOldPassword(user, password.getOldPassword())) {
             throw new InvalidOldPasswordException();
         }
@@ -146,8 +153,10 @@ public class AuthenticationRestController {
         return null;
     }
 
-    private SimpleMailMessage constructResendVerificationTokenEmail(final String contextPath, final Locale locale,
-            final VerificationToken newToken, final User user) {
+    private SimpleMailMessage constructResendVerificationTokenEmail(final String contextPath,
+                                                                    final Locale locale,
+                                                                    final VerificationToken newToken,
+                                                                    final User user) {
 
         final String confirmationUrl = contextPath + "/registrationConfirm.html?token=" + newToken.getToken();
         final String message = messages.getMessage("message.resendToken", null, locale);
@@ -155,8 +164,11 @@ public class AuthenticationRestController {
         return constructEmail("Resend Registration Token", message + " \r\n" + confirmationUrl, user);
     }
 
-    private SimpleMailMessage constructResetTokenEmail(final String contextPath, final Locale locale,
-            final String token, final User user) {
+    private SimpleMailMessage constructResetTokenEmail(final String contextPath,
+                                                       final Locale locale,
+                                                       final String token,
+                                                       final User user) {
+
         final String url = contextPath + "/user/changePassword?token=" + token;
         final String message = messages.getMessage("message.resetPassword", null, locale);
         return constructEmail("Reset Password", message + " \r\n" + url, user);
@@ -165,6 +177,7 @@ public class AuthenticationRestController {
     private SimpleMailMessage constructEmail(String subject, String body, User user) {
 
         final SimpleMailMessage email = new SimpleMailMessage();
+
         email.setSubject(subject);
         email.setText(body);
         email.setTo(user.getEmail());

@@ -51,18 +51,19 @@ public class User {
 
     private String country;
 
-    private boolean enabled = true;
+    private boolean enabled;
 
     private boolean isUsing2FA = false;
 
     private String secret;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
 
     public User() {
-
         super();
         this.secret = Base32.random();
         this.enabled = false;
@@ -70,17 +71,14 @@ public class User {
 
     @Override
     public int hashCode() {
-
         final int prime = 31;
         int result = 1;
         result = (prime * result) + ((getEmail() == null) ? 0 : getEmail().hashCode());
-
         return result;
     }
 
     @Override
     public boolean equals(final Object obj) {
-
         if (this == obj) {
             return true;
         }
@@ -92,16 +90,11 @@ public class User {
         }
 
         final User user = (User) obj;
-        if (!getEmail().equals(user.getEmail()) && !getCompany().equals(user.getCompany())) {
-            return false;
-        }
-
-        return true;
+        return getEmail().equals(user.getEmail()) || getCompany().equals(user.getCompany());
     }
 
     @Override
     public String toString() {
-
         final StringBuilder builder = new StringBuilder();
 
         builder.append("User [id=").append(id)

@@ -20,13 +20,11 @@ public class UserLocation {
     private User user;
 
     public UserLocation() {
-
         super();
         enabled = false;
     }
 
     public UserLocation(String country, User user) {
-
         super();
         this.country = country;
         this.user = user;
@@ -35,20 +33,17 @@ public class UserLocation {
 
     @Override
     public int hashCode() {
-
         final int prime = 31;
         int result = 1;
         result = (prime * result) + ((getCountry() == null) ? 0 : getCountry().hashCode());
         result = (prime * result) + (isEnabled() ? 1231 : 1237);
         result = (prime * result) + ((getId() == null) ? 0 : getId().hashCode());
         result = (prime * result) + ((getUser() == null) ? 0 : getUser().hashCode());
-
         return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-
         if (this == obj) {
             return true;
         }
@@ -78,19 +73,15 @@ public class UserLocation {
             return false;
         }
         if (getUser() == null) {
-            if (other.getUser() != null) {
-                return false;
-            }
-        } else if (!getUser().equals(other.getUser())) {
-            return false;
-        }
-
-        return true;
+            return other.getUser() == null;
+        } else return getUser().equals(other.getUser());
     }
 
     @Override
     public String toString() {
-
-        return "UserLocation [id=" + id + ", country=" + country + ", enabled=" + enabled + ", user=" + user + "]";
+        return "UserLocation [id=" + id
+                + ", country=" + country
+                + ", enabled=" + enabled
+                + ", user=" + user + "]";
     }
 }

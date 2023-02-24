@@ -23,7 +23,6 @@ public class UserController {
     public String getLoggedUsers(final Locale locale, final Model model) {
 
         model.addAttribute("users", activeUserStore.getUsers());
-
         return "users";
     }
 
@@ -31,7 +30,6 @@ public class UserController {
     public String getLoggedUsersFromSessionRegistry(final Locale locale, final Model model) {
 
         model.addAttribute("users", userService.getUsersFromSessionRegistry());
-
         return "users";
     }
 }

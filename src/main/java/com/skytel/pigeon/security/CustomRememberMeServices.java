@@ -31,9 +31,7 @@ public class CustomRememberMeServices extends PersistentTokenBasedRememberMeServ
     private PersistentTokenRepository tokenRepository;
     private String key;
 
-    public CustomRememberMeServices(String key,
-            UserDetailsService userDetailsService,
-            PersistentTokenRepository tokenRepository) {
+    public CustomRememberMeServices(String key, UserDetailsService userDetailsService, PersistentTokenRepository tokenRepository) {
 
         super(key, userDetailsService, tokenRepository);
         this.tokenRepository = tokenRepository;
@@ -41,18 +39,21 @@ public class CustomRememberMeServices extends PersistentTokenBasedRememberMeServ
     }
 
     @Override
-    protected void onLoginSuccess(HttpServletRequest request,
-            HttpServletResponse response,
-            Authentication successfulAuthentication) {
+    protected void onLoginSuccess(HttpServletRequest request, HttpServletResponse response, Authentication successfulAuthentication) {
 
         String username = ((User) successfulAuthentication.getPrincipal()).getEmail();
+
         logger.debug("Creating new persistent login for user " + username);
-        PersistentRememberMeToken persistentToken = new PersistentRememberMeToken(username, generateSeriesData(),
-                generateTokenData(), new Date());
+
+        PersistentRememberMeToken persistentToken =
+                new PersistentRememberMeToken(username, generateSeriesData(), generateTokenData(), new Date());
+
         try {
+
             tokenRepository.createNewToken(persistentToken);
             addCookie(persistentToken, request, response);
         } catch (Exception e) {
+
             logger.error("Failed to save persistent token ", e);
         }
     }
@@ -61,17 +62,18 @@ public class CustomRememberMeServices extends PersistentTokenBasedRememberMeServ
     protected Authentication createSuccessfulAuthentication(HttpServletRequest request, UserDetails user) {
 
         User auser = userRepository.findByEmail(user.getUsername());
-        RememberMeAuthenticationToken auth = new RememberMeAuthenticationToken(key, auser,
-                authoritiesMapper.mapAuthorities(user.getAuthorities()));
+        RememberMeAuthenticationToken auth =
+                new RememberMeAuthenticationToken(key, auser,
+                        authoritiesMapper.mapAuthorities(user.getAuthorities()));
         auth.setDetails(authenticationDetailsSource.buildDetails(request));
+
         return auth;
     }
 
-    private void addCookie(PersistentRememberMeToken token, HttpServletRequest request, HttpServletResponse response) {
+    private void addCookie(PersistentRememberMeToken token, HttpServletRequest request,
+                           HttpServletResponse response) {
 
-        setCookie(new String[] {
-                token.getSeries(),
-                token.getTokenValue()
-        }, getTokenValiditySeconds(), request, response);
+        setCookie(new String[] { token.getSeries(), token.getTokenValue() },
+                getTokenValiditySeconds(), request, response);
     }
 }

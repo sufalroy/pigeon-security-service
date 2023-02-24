@@ -11,15 +11,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@Component("pigeonLogoutSuccessHandler")
-public class PigeonLogoutSuccessHandler implements LogoutSuccessHandler {
+@Component("myLogoutSuccessHandler")
+public class MyLogoutSuccessHandler implements LogoutSuccessHandler {
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
-            Authentication authentication) throws IOException, ServletException {
+                                Authentication authentication) throws IOException, ServletException {
 
         final HttpSession session = request.getSession();
-        if(session != null) {
+        if (session != null) {
             session.removeAttribute("user");
         }
 

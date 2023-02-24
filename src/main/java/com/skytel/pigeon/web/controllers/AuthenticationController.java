@@ -7,8 +7,6 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,8 +33,6 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class AuthenticationController {
-
-    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private IUserService userService;
@@ -75,11 +71,14 @@ public class AuthenticationController {
     }
 
     @GetMapping("/console")
-    public ModelAndView console(final HttpServletRequest request, final ModelMap model,
-            @RequestParam("messageKey") final Optional<String> messageKey) {
+    public ModelAndView console(final HttpServletRequest request,
+                                final ModelMap model,
+                                @RequestParam("messageKey") final Optional<String> messageKey) {
 
         Locale locale = request.getLocale();
+
         messageKey.ifPresent(key -> {
+
             String message = messages.getMessage(key, null, locale);
             model.addAttribute("message", message);
         });
@@ -88,13 +87,16 @@ public class AuthenticationController {
     }
 
     @GetMapping("/badUser")
-    public ModelAndView badUser(final HttpServletRequest request, final ModelMap model,
-            @RequestParam("messageKey") final Optional<String> messageKey,
-            @RequestParam("expired") final Optional<String> expired,
-            @RequestParam("token") final Optional<String> token) {
+    public ModelAndView badUser(final HttpServletRequest request,
+                                final ModelMap model,
+                                @RequestParam("messageKey" ) final Optional<String> messageKey,
+                                @RequestParam("expired" ) final Optional<String> expired,
+                                @RequestParam("token" ) final Optional<String> token) {
 
         Locale locale = request.getLocale();
+
         messageKey.ifPresent(key -> {
+
             String message = messages.getMessage(key, null, locale);
             model.addAttribute("message", message);
         });
@@ -106,10 +108,12 @@ public class AuthenticationController {
     }
 
     @GetMapping("/user/changePassword")
-    public ModelAndView showChangePasswordPage(final ModelMap model, @RequestParam("token") final String token) {
+    public ModelAndView showChangePasswordPage(final ModelMap model,
+                                               @RequestParam("token") final String token) {
+
         final String result = securityUserService.validatePasswordResetToken(token);
 
-        if (result != null) {
+        if(result != null) {
             String messageKey = "auth.message." + result;
             model.addAttribute("messageKey", messageKey);
             return new ModelAndView("redirect:/login", model);
@@ -120,12 +124,15 @@ public class AuthenticationController {
     }
 
     @GetMapping("/updatePassword")
-    public ModelAndView updatePassword(final HttpServletRequest request, final ModelMap model,
-            @RequestParam("messageKey") final Optional<String> messageKey) {
+    public ModelAndView updatePassword(final HttpServletRequest request,
+                                       final ModelMap model,
+                                       @RequestParam("messageKey" ) final Optional<String> messageKey) {
 
         Locale locale = request.getLocale();
         model.addAttribute("lang", locale.getLanguage());
+
         messageKey.ifPresent(key -> {
+
             String message = messages.getMessage(key, null, locale);
             model.addAttribute("message", message);
         });
@@ -134,13 +141,15 @@ public class AuthenticationController {
     }
 
     @GetMapping("/login")
-    public ModelAndView login(final HttpServletRequest request, final ModelMap model,
-            @RequestParam("messageKey") final Optional<String> messageKey,
-            @RequestParam("error") final Optional<String> error) {
+    public ModelAndView login(final HttpServletRequest request,
+                              final ModelMap model,
+                              @RequestParam("messageKey" ) final Optional<String> messageKey,
+                              @RequestParam("error" ) final Optional<String> error) {
 
         Locale locale = request.getLocale();
         model.addAttribute("lang", locale.getLanguage());
         messageKey.ifPresent(key -> {
+
             String message = messages.getMessage(key, null, locale);
             model.addAttribute("message", message);
         });
@@ -154,6 +163,7 @@ public class AuthenticationController {
     public String enableNewLoc(Locale locale, Model model, @RequestParam("token") String token) {
 
         final String loc = userService.isValidNewLocationToken(token);
+
         if (loc != null) {
             model.addAttribute("message", messages.getMessage("message.newLoc.enabled", new Object[] { loc }, locale));
         } else {

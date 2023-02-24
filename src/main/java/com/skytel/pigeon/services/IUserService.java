@@ -12,45 +12,45 @@ import java.util.Optional;
 
 public interface IUserService {
 
-    public User registerUser(RegisterRequest request);
+    User registerUser(RegisterRequest request);
 
-    public User getUser(String verificationToken);
+    User getUser(String verificationToken);
 
-    public void saveRegisteredUser(User user);
+    void saveRegisteredUser(User user);
 
-    public void deleteUser(User user);
+    void deleteUser(User user);
 
-    public void createVerificationTokenForUser(User user, String token);
+    void createVerificationTokenForUser(User user, String token);
 
-    public VerificationToken getVerificationToken(String verificationToken);
+    VerificationToken getVerificationToken(String VerificationToken);
 
-    public VerificationToken generateNewVerificationToken(String token);
+    VerificationToken generateNewVerificationToken(String token);
 
-    public void createPasswordResetTokenForUser(User user, String token);
+    void createPasswordResetTokenForUser(User user, String token);
 
-    public User findUserByEmail(String email);
+    User findUserByEmail(String email);
 
-    public PasswordResetToken getPasswordResetToken(String token);
+    PasswordResetToken getPasswordResetToken(String token);
 
-    public Optional<User> getUserByPasswordResetToken(String token);
+    Optional<User> getUserByPasswordResetToken(String token);
 
-    public Optional<User> getUserByID(long id);
+    Optional<User> getUserByID(long id);
 
-    public void changeUserPassword(User user, String password);
+    void changeUserPassword(User user, String password);
 
-    public boolean checkIfValidOldPassword(User user, String password);
+    boolean checkIfValidOldPassword(User user, String password);
 
-    public String validateVerificationToken(String token);
+    String validateVerificationToken(String token);
 
-    public String generateQRUrl(User user) throws UnsupportedEncodingException;
+    String generateQRUrl(User user) throws UnsupportedEncodingException;
 
-    public User updateUser2FA(boolean use2FA);
+    User updateUser2FA(boolean use2FA);
 
-    public List<String> getUsersFromSessionRegistry();
+    List<String> getUsersFromSessionRegistry();
 
-    public NewLocationToken isNewLoginLocation(String username, String ip);
+    NewLocationToken isNewLoginLocation(String username, String ip);
 
-    public String isValidNewLocationToken(String token);
+    String isValidNewLocationToken(String token);
 
-    public void addUserLocation(User user, String ip);
+    void addUserLocation(User user, String ip);
 }

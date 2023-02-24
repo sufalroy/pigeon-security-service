@@ -18,7 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.skytel.pigeon.exceptions.EmailExistsException;
 import com.skytel.pigeon.persistence.models.User;
 import com.skytel.pigeon.services.IUserService;
 import com.skytel.pigeon.web.requests.RegisterRequest;
@@ -44,7 +43,7 @@ public class UserServiceImplTest {
     private VerificationTokenRepository tokenRepository;
 
     @Test
-    public void givenUserRegistration_whenRegistered_thenCorrect() throws EmailExistsException {
+    public void givenUserRegistration_whenRegistered_thenCorrect() {
 
         final String userEmail = UUID.randomUUID().toString();
         final RegisterRequest request = createRegisterRequest(userEmail);
@@ -75,7 +74,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void givenDetachedUser_whenServiceLoadById_thenCorrect() throws EmailExistsException {
+    public void givenDetachedUser_whenServiceLoadById_thenCorrect() {
 
         final User user = registerUser();
         final User mUser = userService.getUserByID(user.getId()).get();
@@ -83,7 +82,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void givenDetachedUser_whenServiceLoadByEmail_thenCorrect() throws EmailExistsException {
+    public void givenDetachedUser_whenServiceLoadByEmail_thenCorrect() {
 
         final User user = registerUser();
         final User mUser = userService.findUserByEmail(user.getEmail());
@@ -112,7 +111,7 @@ public class UserServiceImplTest {
         request.setEmail(UUID.randomUUID().toString());
         request.setPassword("SecretPassword");
         request.setMatchingPassword("SecretPassword");
-        request.setFirstname("Jhon");
+        request.setFirstname("John");
         request.setLastname("Doe");
         request.setCompany("E Corporation");
         request.setPhone("2221456780");
@@ -293,7 +292,7 @@ public class UserServiceImplTest {
         request.setEmail(email);
         request.setPassword("SecretPassword");
         request.setMatchingPassword("SecretPassword");
-        request.setFirstname("Jhon");
+        request.setFirstname("John");
         request.setLastname("Doe");
         request.setCompany("E Corporation");
         request.setPhone("2221456780");

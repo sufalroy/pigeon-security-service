@@ -45,10 +45,10 @@ public class SecurityConfiguration {
     private UserDetailsService userDetailsService;
 
     @Autowired
-    private AuthenticationSuccessHandler authenticationSuccessHandler;
+    private AuthenticationSuccessHandler myAuthenticationSuccessHandler;
 
     @Autowired
-    private LogoutSuccessHandler logoutSuccessHandler;
+    private LogoutSuccessHandler myLogoutSuccessHandler;
 
     @Autowired
     private AuthenticationFailureHandler authenticationFailureHandler;
@@ -62,11 +62,12 @@ public class SecurityConfiguration {
         http.csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/login*", "/logout*", "/user/registration*", "/registrationConfirm*",
+                .antMatchers("/login*", "/logout*", "/signin/**", "/signup/**",
+                        "/customLogin", "/user/registration*", "/registrationConfirm*",
                         "/expiredAccount*", "/registration*", "/badUser*", "/user/resendRegistrationToken*",
-                        "/forgetPassword*",
-                        "/user/resetPassword*", "/user/savePassword*", "/updatePassword*", "/user/changePassword*",
-                        "/emailError*", "/resources/**", "/successRegister*", "/qrcode*", "/user/enableNewLoc*")
+                        "/forgetPassword*", "/user/resetPassword*", "/user/savePassword*", "/updatePassword*",
+                        "/user/changePassword*", "/emailError*", "/resources/**", "/successRegister*",
+                        "/qrcode*", "/user/enableNewLoc*")
 
                 .permitAll()
                 .antMatchers("/invalidSession*")
@@ -80,7 +81,7 @@ public class SecurityConfiguration {
                 .loginPage("/login")
                 .defaultSuccessUrl("/homepage.html")
                 .failureUrl("/login?error=true")
-                .successHandler(authenticationSuccessHandler)
+                .successHandler(myAuthenticationSuccessHandler)
                 .failureHandler(authenticationFailureHandler)
                 .authenticationDetailsSource(authenticationDetailsSource)
                 .permitAll()
@@ -94,7 +95,7 @@ public class SecurityConfiguration {
                 .none()
                 .and()
                 .logout()
-                .logoutSuccessHandler(logoutSuccessHandler)
+                .logoutSuccessHandler(myLogoutSuccessHandler)
                 .invalidateHttpSession(true)
                 .logoutSuccessUrl("/logout.html?logSucc=true")
                 .deleteCookies("JSESSIONID")
@@ -142,14 +143,18 @@ public class SecurityConfiguration {
 
     @Bean
     public RememberMeServices rememberMeServices() {
+
         CustomRememberMeServices rememberMeServices = new CustomRememberMeServices("theKey", userDetailsService,
                 new InMemoryTokenRepositoryImpl());
+
         return rememberMeServices;
     }
 
     @Bean(name = "GeoIPCountry")
     public DatabaseReader databaseReader() throws IOException, GeoIp2Exception {
+
         final File resource = new File("src/main/resources/maxmind/GeoLite2-Country.mmdb");
+
         return new DatabaseReader.Builder(resource).build();
     }
 
@@ -159,11 +164,13 @@ public class SecurityConfiguration {
         RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
         String hierarchy = "ROLE_ADMIN > ROLE_USER";
         roleHierarchy.setHierarchy(hierarchy);
+
         return roleHierarchy;
     }
 
     @Bean
     public DefaultWebSecurityExpressionHandler webSecurityExpressionHandler() {
+
         DefaultWebSecurityExpressionHandler expressionHandler = new DefaultWebSecurityExpressionHandler();
         expressionHandler.setRoleHierarchy(roleHierarchy());
 

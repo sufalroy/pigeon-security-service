@@ -31,56 +31,46 @@ public class PasswordResetToken {
     private Date expiryDate;
 
     public PasswordResetToken() {
-
         super();
     }
 
     public PasswordResetToken(final String token) {
-
         super();
-
         this.token = token;
-        this.expiryDate = calculateExpiryDate(EXPIRATION);
+        this.expiryDate = calculateExpiryDate();
     }
 
     public PasswordResetToken(final String token, final User user) {
         super();
-
         this.token = token;
         this.user = user;
-        this.expiryDate = calculateExpiryDate(EXPIRATION);
+        this.expiryDate = calculateExpiryDate();
     }
 
     public void updateToken(final String token) {
-
         this.token = token;
-        this.expiryDate = calculateExpiryDate(EXPIRATION);
+        this.expiryDate = calculateExpiryDate();
     }
 
-    private Date calculateExpiryDate(final int expiration) {
-
+    private Date calculateExpiryDate() {
         final Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(new Date().getTime());
-        cal.add(Calendar.MINUTE, expiration);
-
+        cal.add(Calendar.MINUTE, PasswordResetToken.EXPIRATION);
         return new Date(cal.getTime().getTime());
     }
 
     @Override
     public int hashCode() {
-
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getExpiryDate() == null) ? 0 : getExpiryDate().hashCode());
         result = prime * result + ((getToken() == null) ? 0 : getToken().hashCode());
         result = prime * result + ((getUser() == null) ? 0 : getUser().hashCode());
-
         return result;
     }
 
     @Override
     public boolean equals(final Object obj) {
-
         if (this == obj) {
             return true;
         }
@@ -111,22 +101,12 @@ public class PasswordResetToken {
         }
         if (getUser() == null) {
 
-            if (other.getUser() != null) {
-                return false;
-            }
-        } else if (!getUser().equals(other.getUser())) {
-            return false;
-        }
-
-        return true;
+            return other.getUser() == null;
+        } else return getUser().equals(other.getUser());
     }
 
     @Override
     public String toString() {
-
-        final StringBuilder builder = new StringBuilder();
-        builder.append("Token [String=").append(token).append("]").append("[Expires").append(expiryDate).append("]");
-
-        return builder.toString();
+        return "Token [String=" + token + "]" + "[Expires" + expiryDate + "]";
     }
 }

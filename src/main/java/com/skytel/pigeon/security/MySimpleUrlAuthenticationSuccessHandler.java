@@ -22,8 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@Component("pigeonAuthenticationSuccessHandler")
-public class PigeonSimpleUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+@Component("myAuthenticationSuccessHandler")
+public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -40,20 +40,24 @@ public class PigeonSimpleUrlAuthenticationSuccessHandler implements Authenticati
 
     @Override
     public void onAuthenticationSuccess(final HttpServletRequest request,
-            final HttpServletResponse response,
-            final Authentication authentication) throws IOException {
+                                        final HttpServletResponse response,
+                                        final Authentication authentication) throws IOException {
 
         handle(request, response, authentication);
         final HttpSession session = request.getSession(false);
+
         if (session != null) {
+
             session.setMaxInactiveInterval(30 * 60);
 
             String username;
+
             if (authentication.getPrincipal() instanceof User) {
-                username = ((User) authentication.getPrincipal()).getEmail();
+                username = ((User)authentication.getPrincipal()).getEmail();
             } else {
                 username = authentication.getName();
             }
+
             LoggedUser user = new LoggedUser(username, activeUserStore);
             session.setAttribute("user", user);
         }
@@ -66,17 +70,18 @@ public class PigeonSimpleUrlAuthenticationSuccessHandler implements Authenticati
 
         try {
             if (authentication.getPrincipal() instanceof User && isGeoIpLibEnabled()) {
-                deviceService.verifyDevice(((User) authentication.getPrincipal()), request);
+                deviceService.verifyDevice(((User)authentication.getPrincipal()), request);
             }
         } catch (Exception e) {
             logger.error("An error occurred while verifying device or location", e);
             throw new RuntimeException(e);
         }
-
     }
 
-    protected void handle(final HttpServletRequest request, final HttpServletResponse response,
-            final Authentication authentication) throws IOException {
+    protected void handle(final HttpServletRequest request,
+                          final HttpServletResponse response,
+                          final Authentication authentication) throws IOException {
+
         final String targetUrl = determineTargetUrl(authentication);
 
         if (response.isCommitted()) {
@@ -92,23 +97,27 @@ public class PigeonSimpleUrlAuthenticationSuccessHandler implements Authenticati
         boolean isAdmin = false;
         final Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (final GrantedAuthority grantedAuthority : authorities) {
+
             if (grantedAuthority.getAuthority().equals("READ_PRIVILEGE")) {
                 isUser = true;
             } else if (grantedAuthority.getAuthority().equals("WRITE_PRIVILEGE")) {
+
                 isAdmin = true;
                 isUser = false;
                 break;
             }
         }
         if (isUser) {
+
             String username;
             if (authentication.getPrincipal() instanceof User) {
-                username = ((User) authentication.getPrincipal()).getEmail();
-            } else {
+                username = ((User)authentication.getPrincipal()).getEmail();
+            }
+            else {
                 username = authentication.getName();
             }
 
-            return "/homepage.html?user=" + username;
+            return "/homepage.html?user="+username;
         } else if (isAdmin) {
             return "/console";
         } else {
@@ -117,7 +126,6 @@ public class PigeonSimpleUrlAuthenticationSuccessHandler implements Authenticati
     }
 
     protected void clearAuthenticationAttributes(final HttpServletRequest request) {
-
         final HttpSession session = request.getSession(false);
         if (session == null) {
             return;
@@ -126,17 +134,14 @@ public class PigeonSimpleUrlAuthenticationSuccessHandler implements Authenticati
     }
 
     public void setRedirectStrategy(final RedirectStrategy redirectStrategy) {
-
         this.redirectStrategy = redirectStrategy;
     }
 
     protected RedirectStrategy getRedirectStrategy() {
-
         return redirectStrategy;
     }
 
     private boolean isGeoIpLibEnabled() {
-
         return Boolean.parseBoolean(environment.getProperty("geo.ip.lib.enabled"));
     }
 }

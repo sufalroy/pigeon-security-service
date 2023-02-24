@@ -74,22 +74,26 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     @Transactional
     Privilege createPrivilegeIfNotFound(final String name) {
+
         Privilege privilege = privilegeRepository.findByName(name);
         if (privilege == null) {
             privilege = new Privilege(name);
             privilege = privilegeRepository.save(privilege);
         }
+
         return privilege;
     }
 
     @Transactional
     Role createRoleIfNotFound(final String name, final Collection<Privilege> privileges) {
+
         Role role = roleRepository.findByName(name);
         if (role == null) {
             role = new Role(name);
         }
         role.setPrivileges(privileges);
         role = roleRepository.save(role);
+
         return role;
     }
 

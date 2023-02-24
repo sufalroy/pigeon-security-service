@@ -7,6 +7,7 @@ import java.util.Collection;
 
 @Data
 @Entity
+@Table(name = "privileges")
 public class Privilege {
 
     @Id
@@ -23,24 +24,20 @@ public class Privilege {
     }
 
     public Privilege(final String name) {
-
         super();
         this.name = name;
     }
 
     @Override
     public int hashCode() {
-
         final int prime = 31;
         int result = 1;
-
         result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
         return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-
         if (this == obj) {
             return true;
         }
@@ -53,24 +50,14 @@ public class Privilege {
 
         Privilege other = (Privilege) obj;
         if (getName() == null) {
-            if (other.getName() != null) {
-                return false;
-            }
+            return other.getName() == null;
 
-        } else if (!getName().equals(other.getName())) {
-            return false;
-        }
-
-        return true;
+        } else return getName().equals(other.getName());
     }
 
     @Override
     public String toString() {
-
-        final StringBuilder builder = new StringBuilder();
-        builder.append("Privilege [name=").append(name).append("]")
-                .append("[id=").append(id).append("]");
-
-        return builder.toString();
+        return "Privilege [name=" + name + "]" +
+                "[id=" + id + "]";
     }
 }

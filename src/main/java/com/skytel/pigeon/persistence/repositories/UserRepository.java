@@ -1,19 +1,12 @@
 package com.skytel.pigeon.persistence.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
 import com.skytel.pigeon.persistence.models.User;
 
-@Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    public User findByEmail(String email);
-
-    public Boolean existsByEmail(String email);
-
-    public Boolean existsByCompany(String company);
+    User findByEmail(String email);
 
     @Override
-    public void delete(User user);
+    void delete(User user);
 }

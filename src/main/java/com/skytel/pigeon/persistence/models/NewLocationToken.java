@@ -24,18 +24,15 @@ public class NewLocationToken {
     private UserLocation userLocation;
 
     public NewLocationToken() {
-
         super();
     }
 
     public NewLocationToken(final String token) {
-
         super();
         this.token = token;
     }
 
     public NewLocationToken(final String token, final UserLocation userLocation) {
-
         super();
         this.token = token;
         this.userLocation = userLocation;
@@ -43,19 +40,16 @@ public class NewLocationToken {
 
     @Override
     public int hashCode() {
-
         final int prime = 31;
         int result = 1;
         result = (prime * result) + ((getId() == null) ? 0 : getId().hashCode());
         result = (prime * result) + ((getToken() == null) ? 0 : getToken().hashCode());
         result = (prime * result) + ((getUserLocation() == null) ? 0 : getUserLocation().hashCode());
-
         return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-
         if (this == obj) {
             return true;
         }
@@ -83,14 +77,8 @@ public class NewLocationToken {
             return false;
         }
         if (getUserLocation() == null) {
-            if (other.getUserLocation() != null) {
-                return false;
-            }
-        } else if (!getUserLocation().equals(other.getUserLocation())) {
-            return false;
-        }
-
-        return true;
+            return other.getUserLocation() == null;
+        } else return getUserLocation().equals(other.getUserLocation());
     }
 
     @Override

@@ -100,13 +100,16 @@ public class MvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public Validator getValidator() {
+
         LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
         validator.setValidationMessageSource(messageSource);
+
         return validator;
     }
 
     @Bean
     WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> enableDefaultServlet() {
+
         return (factory) -> factory.setRegisterDefaultServlet(true);
     }
 }

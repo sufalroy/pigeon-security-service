@@ -37,11 +37,11 @@ public class DeviceService {
     @Value("${support.email}")
     private String from;
 
-    private DeviceMetadataRepository deviceMetadataRepository;
-    private DatabaseReader databaseReader;
-    private Parser parser;
-    private JavaMailSender mailSender;
-    private MessageSource messages;
+    private final DeviceMetadataRepository deviceMetadataRepository;
+    private final DatabaseReader databaseReader;
+    private final Parser parser;
+    private final JavaMailSender mailSender;
+    private final MessageSource messages;
 
     public DeviceService(DeviceMetadataRepository deviceMetadataRepository,
             @Qualifier("GeoIPCity") DatabaseReader databaseReader,

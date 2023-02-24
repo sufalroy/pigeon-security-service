@@ -30,9 +30,8 @@ public class DifferentLocationLoginListener implements ApplicationListener<OnDif
         final String recipientAddress = event.getUsername();
         final String subject = "Login attempt from different location";
         final String message = messages.getMessage("message.differentLocation",
-                new Object[] { new Date().toString(), event.getToken().getUserLocation().getCountry(),
-                        event.getIp(), enableLocUri, changePassUri },
-                event.getLocale());
+                new Object[] { new Date().toString(), event.getToken()
+                .getUserLocation().getCountry(), event.getIp(), enableLocUri, changePassUri }, event.getLocale());
 
         final SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipientAddress);
