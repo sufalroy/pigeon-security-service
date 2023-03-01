@@ -1,4 +1,4 @@
-package com.skytel.pigeon.persistence.models;
+package com.skytel.pigeon.persistence.entities;
 
 import javax.persistence.*;
 import lombok.Data;
@@ -7,29 +7,23 @@ import java.util.Collection;
 
 @Data
 @Entity
-@Table(name = "roles")
-public class Role {
+@Table(name = "privileges")
+public class Privilege {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToMany(mappedBy = "roles")
-    private Collection<User> users;
-
-    @ManyToMany
-    @JoinTable(name = "roles_privileges",
-            joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id"))
-    private Collection<Privilege> privileges;
-
     private String name;
 
-    public Role() {
+    @ManyToMany(mappedBy = "privileges")
+    private Collection<Role> roles;
+
+    public Privilege() {
         super();
     }
 
-    public Role(final String name) {
+    public Privilege(final String name) {
         super();
         this.name = name;
     }
@@ -39,12 +33,11 @@ public class Role {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
-
         return result;
     }
 
     @Override
-    public boolean equals(final Object obj) {
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -55,12 +48,16 @@ public class Role {
             return false;
         }
 
-        final Role role = (Role) obj;
-        return getName().equals(role.getName());
+        Privilege other = (Privilege) obj;
+        if (getName() == null) {
+            return other.getName() == null;
+
+        } else return getName().equals(other.getName());
     }
 
     @Override
     public String toString() {
-        return "Role [name=" + name + "]" + "[id=" + id + "]";
+        return "Privilege [name=" + name + "]" +
+                "[id=" + id + "]";
     }
 }

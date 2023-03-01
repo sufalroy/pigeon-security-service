@@ -1,6 +1,6 @@
 package com.skytel.pigeon.web.events.listeners;
 
-import com.skytel.pigeon.persistence.models.User;
+import com.skytel.pigeon.persistence.entities.User;
 import com.skytel.pigeon.services.IUserService;
 import com.skytel.pigeon.web.events.OnRegistrationCompleteEvent;
 

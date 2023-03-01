@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.skytel.pigeon.persistence.models.Privilege;
-import com.skytel.pigeon.persistence.models.Role;
-import com.skytel.pigeon.persistence.models.User;
+import com.skytel.pigeon.persistence.entities.Privilege;
+import com.skytel.pigeon.persistence.entities.Role;
+import com.skytel.pigeon.persistence.entities.User;
 import com.skytel.pigeon.security.ISecurityUserService;
 import com.skytel.pigeon.services.IUserService;
 

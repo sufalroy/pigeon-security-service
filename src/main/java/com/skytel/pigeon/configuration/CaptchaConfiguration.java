@@ -14,18 +14,14 @@ public class CaptchaConfiguration {
 
     @Bean
     public ClientHttpRequestFactory clientHttpRequestFactory() {
-
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
         factory.setConnectTimeout(3 * 1000);
         factory.setReadTimeout(7 * 1000);
-
         return factory;
     }
 
     @Bean
     public RestOperations restTemplate() {
-
-        RestTemplate restTemplate = new RestTemplate(this.clientHttpRequestFactory());
-        return restTemplate;
+        return new RestTemplate(this.clientHttpRequestFactory());
     }
 }

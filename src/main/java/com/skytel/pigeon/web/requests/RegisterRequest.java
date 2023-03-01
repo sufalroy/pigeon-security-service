@@ -41,27 +41,27 @@ public class RegisterRequest {
         private String matchingPassword;
 
         @NotNull
-        @Size(min = 1)
+        @Size(min = 1, max = 20)
         private String reference;
 
         @NotNull
-        @Size(min = 1)
+        @Size(min = 1, max = 10)
         private String postal;
 
         @NotNull
-        @Size(min = 1)
+        @Size(min = 1, max = 20)
         private String street;
 
         @NotNull
-        @Size(min = 1)
+        @Size(min = 1, max = 20)
         private String state;
 
         @NotNull
-        @Size(min = 1)
+        @Size(min = 1, max = 20)
         private String city;
 
         @NotNull
-        @Size(min = 1)
+        @Size(min = 1, max = 20)
         private String country;
 
         private boolean isUsing2FA;

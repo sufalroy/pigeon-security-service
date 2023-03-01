@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-import com.skytel.pigeon.persistence.models.PasswordResetToken;
-import com.skytel.pigeon.persistence.models.User;
+import com.skytel.pigeon.persistence.entities.PasswordResetToken;
+import com.skytel.pigeon.persistence.entities.User;
 
 public interface PasswordResetTokenRepository extends JpaRepository<PasswordResetToken, Long> {
     

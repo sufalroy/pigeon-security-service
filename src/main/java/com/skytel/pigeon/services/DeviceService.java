@@ -19,8 +19,8 @@ import com.google.common.base.Strings;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CityResponse;
-import com.skytel.pigeon.persistence.models.DeviceMetadata;
-import com.skytel.pigeon.persistence.models.User;
+import com.skytel.pigeon.persistence.entities.DeviceMetadata;
+import com.skytel.pigeon.persistence.entities.User;
 import com.skytel.pigeon.persistence.repositories.DeviceMetadataRepository;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,7 +48,6 @@ public class DeviceService {
             Parser parser,
             JavaMailSender mailSender,
             MessageSource messages) {
-
         this.deviceMetadataRepository = deviceMetadataRepository;
         this.databaseReader = databaseReader;
         this.parser = parser;
@@ -57,7 +56,6 @@ public class DeviceService {
     }
 
     public void verifyDevice(User user, HttpServletRequest request) throws IOException, GeoIp2Exception {
-
         String ip = extractIp(request);
         String location = getIpLocation(ip);
 
@@ -66,7 +64,6 @@ public class DeviceService {
         DeviceMetadata existingDevice = findExistingDevice(user.getId(), deviceDetails, location);
 
         if (Objects.isNull(existingDevice)) {
-
             unknownDeviceNotification(deviceDetails, location, ip, user.getEmail(), request.getLocale());
 
             DeviceMetadata deviceMetadata = new DeviceMetadata();
@@ -75,7 +72,6 @@ public class DeviceService {
             deviceMetadata.setDeviceDetails(deviceDetails);
             deviceMetadata.setLastLoggedIn(new Date());
             deviceMetadataRepository.save(deviceMetadata);
-
         } else {
             existingDevice.setLastLoggedIn(new Date());
             deviceMetadataRepository.save(existingDevice);
@@ -83,16 +79,13 @@ public class DeviceService {
     }
 
     private String extractIp(HttpServletRequest request) {
-
         String clientIp;
-
         String clientXForwardedForIp = request.getHeader("x-forwarded-for");
         if (nonNull(clientXForwardedForIp)) {
             clientIp = parseXForwardedHeader(clientXForwardedForIp);
         } else {
             clientIp = request.getRemoteAddr();
         }
-
         return clientIp;
     }
 
@@ -101,22 +94,18 @@ public class DeviceService {
     }
 
     private String getDeviceDetails(String userAgent) {
-
         String deviceDetails = UNKNOWN;
 
         Client client = parser.parse(userAgent);
         if (Objects.nonNull(client)) {
-            deviceDetails = client.userAgent.family + " " +
-                    client.userAgent.major + "." + client.userAgent.minor + " - " +
-                    client.os.family + " " + client.os.major + "." + client.os.minor;
+            deviceDetails = client.userAgent.family + " " + client.userAgent.major + "." + client.userAgent.minor +
+                    " - " + client.os.family + " " + client.os.major + "." + client.os.minor;
 
         }
-
         return deviceDetails;
     }
 
     private String getIpLocation(String ip) throws IOException, GeoIp2Exception {
-
         String location = UNKNOWN;
 
         InetAddress ipAddress = InetAddress.getByName(ip);
@@ -128,22 +117,19 @@ public class DeviceService {
 
             location = cityResponse.getCity().getName();
         }
-
         return location;
     }
 
-    private DeviceMetadata findExistingDevice(Long id, String deviceDetails, String location) {
+    private DeviceMetadata findExistingDevice(Long userId, String deviceDetails, String location) {
 
-        List<DeviceMetadata> knownDevices = deviceMetadataRepository.findByUserId(id);
+        List<DeviceMetadata> knownDevices = deviceMetadataRepository.findByUserId(userId);
 
         for (DeviceMetadata existingDevice : knownDevices) {
             if (existingDevice.getDeviceDetails().equals(deviceDetails) &&
                     existingDevice.getLocation().equals(location)) {
-
                 return existingDevice;
             }
         }
-
         return null;
     }
 
@@ -152,20 +138,15 @@ public class DeviceService {
             String ip,
             String email,
             Locale locale) {
-
         final String subject = "New Login Notification";
         final SimpleMailMessage notification = new SimpleMailMessage();
         notification.setTo(email);
         notification.setSubject(subject);
 
         String text = getMessage("message.login.notification.deviceDetails", locale) +
-                " " + deviceDetails +
-                "\n" +
-                getMessage("message.login.notification.location", locale) +
-                " " + location +
-                "\n" +
-                getMessage("message.login.notification.ip", locale) +
-                " " + ip;
+                " " + deviceDetails + "\n" +
+                getMessage("message.login.notification.location", locale) + " " + location + "\n" +
+                getMessage("message.login.notification.ip", locale) + " " + ip;
 
         notification.setText(text);
         notification.setFrom(from);
@@ -174,7 +155,6 @@ public class DeviceService {
     }
 
     private String getMessage(String code, Locale locale) {
-
         try {
             return messages.getMessage(code, null, locale);
         } catch (NoSuchMessageException ex) {

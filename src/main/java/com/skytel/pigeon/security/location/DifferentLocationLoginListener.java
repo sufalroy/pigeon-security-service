@@ -24,14 +24,14 @@ public class DifferentLocationLoginListener implements ApplicationListener<OnDif
 
     @Override
     public void onApplicationEvent(final OnDifferentLocationLoginEvent event) {
-
         final String enableLocUri = event.getUrl() + "/user/enableNewLoc?token=" + event.getToken().getToken();
         final String changePassUri = event.getUrl() + "/changePassword.html";
         final String recipientAddress = event.getUsername();
         final String subject = "Login attempt from different location";
-        final String message = messages.getMessage("message.differentLocation",
-                new Object[] { new Date().toString(), event.getToken()
-                .getUserLocation().getCountry(), event.getIp(), enableLocUri, changePassUri }, event.getLocale());
+        final String message = messages.getMessage("message.differentLocation", new Object[] {
+                new Date().toString(), event.getToken()
+                .getUserLocation()
+                .getCountry(), event.getIp(), enableLocUri, changePassUri }, event.getLocale());
 
         final SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipientAddress);

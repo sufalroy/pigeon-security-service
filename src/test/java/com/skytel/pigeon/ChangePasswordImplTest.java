@@ -1,6 +1,6 @@
 package com.skytel.pigeon;
 
-import com.skytel.pigeon.persistence.models.User;
+import com.skytel.pigeon.persistence.entities.User;
 import com.skytel.pigeon.persistence.repositories.UserRepository;
 import io.restassured.RestAssured;
 import io.restassured.authentication.FormAuthConfig;

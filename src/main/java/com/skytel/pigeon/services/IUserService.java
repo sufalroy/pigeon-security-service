@@ -1,9 +1,9 @@
 package com.skytel.pigeon.services;
 
-import com.skytel.pigeon.persistence.models.NewLocationToken;
-import com.skytel.pigeon.persistence.models.PasswordResetToken;
-import com.skytel.pigeon.persistence.models.User;
-import com.skytel.pigeon.persistence.models.VerificationToken;
+import com.skytel.pigeon.persistence.entities.NewLocationToken;
+import com.skytel.pigeon.persistence.entities.PasswordResetToken;
+import com.skytel.pigeon.persistence.entities.User;
+import com.skytel.pigeon.persistence.entities.VerificationToken;
 import com.skytel.pigeon.web.requests.RegisterRequest;
 
 import java.io.UnsupportedEncodingException;
@@ -28,11 +28,11 @@ public interface IUserService {
 
     void createPasswordResetTokenForUser(User user, String token);
 
-    User findUserByEmail(String email);
-
     PasswordResetToken getPasswordResetToken(String token);
 
     Optional<User> getUserByPasswordResetToken(String token);
+
+    User findUserByEmail(String email);
 
     Optional<User> getUserByID(long id);
 

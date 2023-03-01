@@ -37,7 +37,7 @@ public class GoogleResponse {
     enum ErrorCode {
         MissingSecret, InvalidSecret, MissingResponse, InvalidResponse, BadRequest, TimeoutOrDuplicate;
 
-        private static Map<String, ErrorCode> errorsMap = new HashMap<>(6);
+        private static final Map<String, ErrorCode> errorsMap = new HashMap<>(6);
 
         static {
             errorsMap.put("missing-input-secret", MissingSecret);
@@ -47,7 +47,6 @@ public class GoogleResponse {
             errorsMap.put("invalid-input-response", BadRequest);
             errorsMap.put("timeout-or-duplicate", TimeoutOrDuplicate);
         }
-
         @JsonCreator
         public static ErrorCode forValue(final String value) {
             return errorsMap.get(value.toLowerCase());
@@ -117,17 +116,14 @@ public class GoogleResponse {
     @JsonIgnore
     public boolean hasClientError() {
         final ErrorCode[] errors = getErrorCodes();
-        if (errors == null) {
-            return false;
-        }
+        if (errors == null) { return false; }
         for (final ErrorCode error : errors) {
             switch (error) {
-                case InvalidResponse:
-                case MissingResponse:
-                case BadRequest:
+                case InvalidResponse, MissingResponse, BadRequest -> {
                     return true;
-                default:
-                    break;
+                }
+                default -> {
+                }
             }
         }
         return false;

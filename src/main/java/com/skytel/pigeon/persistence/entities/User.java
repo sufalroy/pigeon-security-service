@@ -1,4 +1,4 @@
-package com.skytel.pigeon.persistence.models;
+package com.skytel.pigeon.persistence.entities;
 
 import java.util.Collection;
 

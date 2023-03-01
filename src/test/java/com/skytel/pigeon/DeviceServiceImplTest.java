@@ -1,7 +1,7 @@
 package com.skytel.pigeon;
 
-import com.skytel.pigeon.persistence.models.DeviceMetadata;
-import com.skytel.pigeon.persistence.models.User;
+import com.skytel.pigeon.persistence.entities.DeviceMetadata;
+import com.skytel.pigeon.persistence.entities.User;
 import com.skytel.pigeon.persistence.repositories.DeviceMetadataRepository;
 import com.skytel.pigeon.persistence.repositories.UserRepository;
 import io.restassured.RestAssured;

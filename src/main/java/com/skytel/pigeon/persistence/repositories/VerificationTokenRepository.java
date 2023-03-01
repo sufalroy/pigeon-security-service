@@ -1,7 +1,7 @@
 package com.skytel.pigeon.persistence.repositories;
 
-import com.skytel.pigeon.persistence.models.User;
-import com.skytel.pigeon.persistence.models.VerificationToken;
+import com.skytel.pigeon.persistence.entities.User;
+import com.skytel.pigeon.persistence.entities.VerificationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

@@ -1,5 +1,6 @@
 package com.skytel.pigeon.security;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -10,8 +11,8 @@ import javax.servlet.http.HttpSessionBindingListener;
 
 @Component
 public class LoggedUser implements HttpSessionBindingListener, Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
-
     private String username;
     private ActiveUserStore activeUserStore;
 

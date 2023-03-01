@@ -1,28 +1,26 @@
 package com.skytel.pigeon.security.google2fa;
 
-import com.skytel.pigeon.persistence.models.User;
+import com.skytel.pigeon.persistence.entities.User;
 import com.skytel.pigeon.persistence.repositories.UserRepository;
+import lombok.AllArgsConstructor;
 import org.jboss.aerogear.security.otp.Totp;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 
+@AllArgsConstructor
 public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
 
-    @Autowired
     private UserRepository userRepository;
 
     @Override
     public Authentication authenticate(Authentication auth) throws AuthenticationException {
-
         final User user = userRepository.findByEmail(auth.getName());
         if ((user == null)) {
             throw new BadCredentialsException("Invalid username or password");
         }
-
         if (user.isUsing2FA()) {
             final String verificationCode = ((CustomWebAuthenticationDetails) auth.getDetails()).getVerificationCode();
             final Totp totp = new Totp(user.getSecret());
@@ -30,7 +28,6 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
                 throw new BadCredentialsException("Invalid verification code");
             }
         }
-
         final Authentication result = super.authenticate(auth);
         return new UsernamePasswordAuthenticationToken(user, result.getCredentials(), result.getAuthorities());
     }

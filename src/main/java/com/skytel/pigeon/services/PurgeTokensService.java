@@ -1,4 +1,4 @@
-package com.skytel.pigeon.tasks;
+package com.skytel.pigeon.services;
 
 import com.skytel.pigeon.persistence.repositories.PasswordResetTokenRepository;
 import com.skytel.pigeon.persistence.repositories.VerificationTokenRepository;
@@ -12,7 +12,7 @@ import java.util.Date;
 
 @Service
 @Transactional
-public class PurgeTokens {
+public class PurgeTokensService {
 
     @Autowired
     VerificationTokenRepository tokenRepository;

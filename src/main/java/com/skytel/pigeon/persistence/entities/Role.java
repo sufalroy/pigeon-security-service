@@ -1,4 +1,4 @@
-package com.skytel.pigeon.persistence.models;
+package com.skytel.pigeon.persistence.entities;
 
 import javax.persistence.*;
 import lombok.Data;
@@ -7,23 +7,29 @@ import java.util.Collection;
 
 @Data
 @Entity
-@Table(name = "privileges")
-public class Privilege {
+@Table(name = "roles")
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @ManyToMany(mappedBy = "roles")
+    private Collection<User> users;
+
+    @ManyToMany
+    @JoinTable(name = "roles_privileges",
+            joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id"))
+    private Collection<Privilege> privileges;
+
     private String name;
 
-    @ManyToMany(mappedBy = "privileges")
-    private Collection<Role> roles;
-
-    public Privilege() {
+    public Role() {
         super();
     }
 
-    public Privilege(final String name) {
+    public Role(final String name) {
         super();
         this.name = name;
     }
@@ -33,11 +39,12 @@ public class Privilege {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
+
         return result;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
@@ -48,16 +55,12 @@ public class Privilege {
             return false;
         }
 
-        Privilege other = (Privilege) obj;
-        if (getName() == null) {
-            return other.getName() == null;
-
-        } else return getName().equals(other.getName());
+        final Role role = (Role) obj;
+        return getName().equals(role.getName());
     }
 
     @Override
     public String toString() {
-        return "Privilege [name=" + name + "]" +
-                "[id=" + id + "]";
+        return "Role [name=" + name + "]" + "[id=" + id + "]";
     }
 }

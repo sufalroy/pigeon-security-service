@@ -10,9 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.skytel.pigeon.exceptions.EmailExistsException;
-import com.skytel.pigeon.persistence.models.User;
-import com.skytel.pigeon.persistence.models.VerificationToken;
+import com.skytel.pigeon.persistence.entities.User;
+import com.skytel.pigeon.persistence.entities.VerificationToken;
 import com.skytel.pigeon.persistence.repositories.UserRepository;
 import com.skytel.pigeon.persistence.repositories.VerificationTokenRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;

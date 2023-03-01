@@ -1,10 +1,10 @@
 package com.skytel.pigeon;
 
-import com.skytel.pigeon.persistence.models.User;
-import com.skytel.pigeon.persistence.models.VerificationToken;
+import com.skytel.pigeon.persistence.entities.User;
+import com.skytel.pigeon.persistence.entities.VerificationToken;
 import com.skytel.pigeon.persistence.repositories.UserRepository;
 import com.skytel.pigeon.persistence.repositories.VerificationTokenRepository;
-import com.skytel.pigeon.tasks.PurgeTokens;
+import com.skytel.pigeon.services.PurgeTokensService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,7 +34,7 @@ public class TokenExpirationImplTest {
     private VerificationTokenRepository tokenRepository;
 
     @Autowired
-    private PurgeTokens purgeTokens;
+    private PurgeTokensService purgeTokensService;
 
     @Autowired
     private PasswordEncoder encoder;
@@ -112,7 +112,7 @@ public class TokenExpirationImplTest {
     @Test
     public void whenPurgeTokenTask_thenCorrect() {
 
-        purgeTokens.purgeExpired();
+        purgeTokensService.purgeExpired();
         assertFalse(tokenRepository.findById(tokenId).isPresent());
     }
 }

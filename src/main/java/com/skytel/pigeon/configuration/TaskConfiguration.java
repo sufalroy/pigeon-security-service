@@ -6,7 +6,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Configuration
 @EnableScheduling
-@ComponentScan({"com.skytel.pigeon.tasks"})
+@ComponentScan({"com.skytel.pigeon.services"})
 public class TaskConfiguration {
     
 }

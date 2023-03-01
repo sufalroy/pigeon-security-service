@@ -3,10 +3,13 @@ package com.skytel.pigeon.configuration;
 import java.io.File;
 import java.io.IOException;
 
+import com.skytel.pigeon.persistence.repositories.UserRepository;
+import com.skytel.pigeon.security.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,21 +20,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.RememberMeServices;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 import com.maxmind.geoip2.DatabaseReader;
-import com.maxmind.geoip2.exception.GeoIp2Exception;
-import com.skytel.pigeon.security.CustomRememberMeServices;
 import com.skytel.pigeon.security.google2fa.CustomAuthenticationProvider;
 import com.skytel.pigeon.security.google2fa.CustomWebAuthenticationDetailsSource;
 import com.skytel.pigeon.security.location.DifferentLocationChecker;
@@ -42,16 +39,19 @@ import com.skytel.pigeon.security.location.DifferentLocationChecker;
 public class SecurityConfiguration {
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserRepository userRepository;
 
     @Autowired
-    private AuthenticationSuccessHandler myAuthenticationSuccessHandler;
+    private MyUserDetailsService userDetailsService;
 
     @Autowired
-    private LogoutSuccessHandler myLogoutSuccessHandler;
+    private MySimpleUrlAuthenticationSuccessHandler myAuthenticationSuccessHandler;
 
     @Autowired
-    private AuthenticationFailureHandler authenticationFailureHandler;
+    private MyLogoutSuccessHandler myLogoutSuccessHandler;
+
+    @Autowired
+    private CustomAuthenticationFailureHandler authenticationFailureHandler;
 
     @Autowired
     private CustomWebAuthenticationDetailsSource authenticationDetailsSource;
@@ -62,8 +62,11 @@ public class SecurityConfiguration {
         http.csrf()
                 .disable()
                 .authorizeRequests()
+                .expressionHandler(webSecurityExpressionHandler())
+                .antMatchers(HttpMethod.GET, "/roleHierarchy")
+                .hasRole("STAFF")
                 .antMatchers("/login*", "/logout*", "/signin/**", "/signup/**",
-                        "/customLogin", "/user/registration*", "/registrationConfirm*",
+                        "/user/registration*", "/registrationConfirm*",
                         "/expiredAccount*", "/registration*", "/badUser*", "/user/resendRegistrationToken*",
                         "/forgetPassword*", "/user/resetPassword*", "/user/savePassword*", "/updatePassword*",
                         "/user/changePassword*", "/emailError*", "/resources/**", "/successRegister*",
@@ -122,12 +125,10 @@ public class SecurityConfiguration {
 
     @Bean
     public DaoAuthenticationProvider authProvider() {
-
-        final CustomAuthenticationProvider authProvider = new CustomAuthenticationProvider();
+        final CustomAuthenticationProvider authProvider = new CustomAuthenticationProvider(this.userRepository);
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(encoder());
         authProvider.setPostAuthenticationChecks(differentLocationChecker());
-
         return authProvider;
     }
 
@@ -143,43 +144,35 @@ public class SecurityConfiguration {
 
     @Bean
     public RememberMeServices rememberMeServices() {
-
-        CustomRememberMeServices rememberMeServices = new CustomRememberMeServices("theKey", userDetailsService,
-                new InMemoryTokenRepositoryImpl());
-
-        return rememberMeServices;
+        return new CustomRememberMeServices("theKey",
+                userDetailsService,
+                new InMemoryTokenRepositoryImpl(),
+                userRepository);
     }
 
     @Bean(name = "GeoIPCountry")
-    public DatabaseReader databaseReader() throws IOException, GeoIp2Exception {
-
+    public DatabaseReader databaseReader() throws IOException {
         final File resource = new File("src/main/resources/maxmind/GeoLite2-Country.mmdb");
-
         return new DatabaseReader.Builder(resource).build();
     }
 
     @Bean
     public RoleHierarchy roleHierarchy() {
-
         RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-        String hierarchy = "ROLE_ADMIN > ROLE_USER";
+        String hierarchy = "ROLE_ADMIN > ROLE_STAFF \n ROLE_STAFF > ROLE_USER";
         roleHierarchy.setHierarchy(hierarchy);
-
         return roleHierarchy;
     }
 
     @Bean
     public DefaultWebSecurityExpressionHandler webSecurityExpressionHandler() {
-
         DefaultWebSecurityExpressionHandler expressionHandler = new DefaultWebSecurityExpressionHandler();
         expressionHandler.setRoleHierarchy(roleHierarchy());
-
         return expressionHandler;
     }
 
     @Bean
     public HttpSessionEventPublisher httpSessionEventPublisher() {
-
         return new HttpSessionEventPublisher();
     }
 

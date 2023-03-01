@@ -4,7 +4,7 @@ import java.util.Locale;
 
 import org.springframework.context.ApplicationEvent;
 
-import com.skytel.pigeon.persistence.models.NewLocationToken;
+import com.skytel.pigeon.persistence.entities.NewLocationToken;
 
 import lombok.Getter;
 

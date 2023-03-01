@@ -33,18 +33,15 @@ public abstract class AbstractCaptchaService implements ICaptchaService {
 
     @Override
     public String getReCaptchaSite() {
-
         return captchaSettings.getSite();
     }
 
     @Override
     public String getReCaptchaSecret() {
-
         return captchaSettings.getSecret();
     }
 
     protected void securityCheck(final String response) {
-
         logger.debug("Attempting to validate response {}", response);
 
         if (reCaptchaAttemptService.isBlocked(getClientIP())) {
@@ -61,7 +58,6 @@ public abstract class AbstractCaptchaService implements ICaptchaService {
     }
 
     protected String getClientIP() {
-
         final String xfHeader = request.getHeader("X-Forwarded-For");
         if (xfHeader == null || xfHeader.isEmpty() || !xfHeader.contains(request.getRemoteAddr())) {
             return request.getRemoteAddr();

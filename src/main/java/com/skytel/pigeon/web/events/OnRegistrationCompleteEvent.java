@@ -1,6 +1,6 @@
 package com.skytel.pigeon.web.events;
 
-import com.skytel.pigeon.persistence.models.User;
+import com.skytel.pigeon.persistence.entities.User;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 

@@ -18,14 +18,10 @@ public class AuthenticationFailureListener implements ApplicationListener<Authen
 
     @Override
     public void onApplicationEvent(final AuthenticationFailureBadCredentialsEvent e) {
-
         final String xfHeader = request.getHeader("X-Forwarded-For");
-
         if (xfHeader == null || xfHeader.isEmpty() || !xfHeader.contains(request.getRemoteAddr())) {
-
             loginAttemptService.loginFailed(request.getRemoteAddr());
         } else {
-
             loginAttemptService.loginFailed(xfHeader.split(",")[0]);
         }
     }

@@ -2,8 +2,8 @@ package com.skytel.pigeon.web.controllers;
 
 import com.skytel.pigeon.captcha.ICaptchaService;
 import com.skytel.pigeon.exceptions.InvalidOldPasswordException;
-import com.skytel.pigeon.persistence.models.User;
-import com.skytel.pigeon.persistence.models.VerificationToken;
+import com.skytel.pigeon.persistence.entities.User;
+import com.skytel.pigeon.persistence.entities.VerificationToken;
 import com.skytel.pigeon.security.ISecurityUserService;
 import com.skytel.pigeon.services.IUserService;
 import com.skytel.pigeon.web.events.OnRegistrationCompleteEvent;

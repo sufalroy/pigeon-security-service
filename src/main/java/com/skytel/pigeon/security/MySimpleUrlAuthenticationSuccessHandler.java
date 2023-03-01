@@ -15,7 +15,7 @@ import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import com.skytel.pigeon.persistence.models.User;
+import com.skytel.pigeon.persistence.entities.User;
 import com.skytel.pigeon.services.DeviceService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +27,7 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+    private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     @Autowired
     ActiveUserStore activeUserStore;
@@ -42,32 +42,25 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
     public void onAuthenticationSuccess(final HttpServletRequest request,
                                         final HttpServletResponse response,
                                         final Authentication authentication) throws IOException {
-
         handle(request, response, authentication);
         final HttpSession session = request.getSession(false);
-
         if (session != null) {
-
             session.setMaxInactiveInterval(30 * 60);
-
             String username;
-
             if (authentication.getPrincipal() instanceof User) {
                 username = ((User)authentication.getPrincipal()).getEmail();
-            } else {
+            }
+            else {
                 username = authentication.getName();
             }
-
             LoggedUser user = new LoggedUser(username, activeUserStore);
             session.setAttribute("user", user);
         }
         clearAuthenticationAttributes(request);
-
         loginNotification(authentication, request);
     }
 
     private void loginNotification(Authentication authentication, HttpServletRequest request) {
-
         try {
             if (authentication.getPrincipal() instanceof User && isGeoIpLibEnabled()) {
                 deviceService.verifyDevice(((User)authentication.getPrincipal()), request);
@@ -76,14 +69,13 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
             logger.error("An error occurred while verifying device or location", e);
             throw new RuntimeException(e);
         }
+
     }
 
     protected void handle(final HttpServletRequest request,
                           final HttpServletResponse response,
                           final Authentication authentication) throws IOException {
-
         final String targetUrl = determineTargetUrl(authentication);
-
         if (response.isCommitted()) {
             logger.debug("Response has already been committed. Unable to redirect to " + targetUrl);
             return;
@@ -92,31 +84,25 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
     }
 
     protected String determineTargetUrl(final Authentication authentication) {
-
         boolean isUser = false;
         boolean isAdmin = false;
         final Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (final GrantedAuthority grantedAuthority : authorities) {
-
             if (grantedAuthority.getAuthority().equals("READ_PRIVILEGE")) {
                 isUser = true;
             } else if (grantedAuthority.getAuthority().equals("WRITE_PRIVILEGE")) {
-
                 isAdmin = true;
                 isUser = false;
                 break;
             }
         }
         if (isUser) {
-
             String username;
             if (authentication.getPrincipal() instanceof User) {
                 username = ((User)authentication.getPrincipal()).getEmail();
-            }
-            else {
+            } else {
                 username = authentication.getName();
             }
-
             return "/homepage.html?user="+username;
         } else if (isAdmin) {
             return "/console";
@@ -133,15 +119,5 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
         session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
     }
 
-    public void setRedirectStrategy(final RedirectStrategy redirectStrategy) {
-        this.redirectStrategy = redirectStrategy;
-    }
-
-    protected RedirectStrategy getRedirectStrategy() {
-        return redirectStrategy;
-    }
-
-    private boolean isGeoIpLibEnabled() {
-        return Boolean.parseBoolean(environment.getProperty("geo.ip.lib.enabled"));
-    }
+    private boolean isGeoIpLibEnabled() { return Boolean.parseBoolean(environment.getProperty("geo.ip.lib.enabled")); }
 }

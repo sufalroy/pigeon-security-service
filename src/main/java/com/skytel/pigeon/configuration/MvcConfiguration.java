@@ -40,7 +40,6 @@ public class MvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(final ViewControllerRegistry registry) {
-
         registry.addViewController("/").setViewName("forward:/login");
         registry.addViewController("/registration.html");
         registry.addViewController("/logout.html");
@@ -100,16 +99,13 @@ public class MvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public Validator getValidator() {
-
         LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
         validator.setValidationMessageSource(messageSource);
-
         return validator;
     }
 
     @Bean
     WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> enableDefaultServlet() {
-
         return (factory) -> factory.setRegisterDefaultServlet(true);
     }
 }
