@@ -49,7 +49,6 @@ public class DeviceServiceImplTest {
 
     @BeforeEach
     public void init() {
-
         User user = userRepository.findByEmail("test@test.com");
 
         if(user == null) {

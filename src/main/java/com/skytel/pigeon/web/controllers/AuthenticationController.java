@@ -1,6 +1,5 @@
 package com.skytel.pigeon.web.controllers;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -49,24 +48,20 @@ public class AuthenticationController {
 
     @GetMapping("/registrationConfirm")
     public ModelAndView confirmRegistration(final HttpServletRequest request, final ModelMap model,
-            @RequestParam("token") final String token) throws UnsupportedEncodingException {
-
+            @RequestParam("token") final String token) {
         Locale locale = request.getLocale();
         model.addAttribute("lang", locale.getLanguage());
         final String result = userService.validateVerificationToken(token);
-
         if (result.equals("valid")) {
             final User user = userService.getUser(token);
             authWithoutPassword(user);
             model.addAttribute("messageKey", "message.accountVerified");
-
             return new ModelAndView("redirect:/console", model);
         }
 
         model.addAttribute("messageKey", "auth.message." + result);
         model.addAttribute("expired", "expired".equals(result));
         model.addAttribute("token", token);
-
         return new ModelAndView("redirect:/badUser", model);
     }
 
@@ -74,15 +69,11 @@ public class AuthenticationController {
     public ModelAndView console(final HttpServletRequest request,
                                 final ModelMap model,
                                 @RequestParam("messageKey") final Optional<String> messageKey) {
-
         Locale locale = request.getLocale();
-
         messageKey.ifPresent(key -> {
-
             String message = messages.getMessage(key, null, locale);
             model.addAttribute("message", message);
         });
-
         return new ModelAndView("console", model);
     }
 
@@ -92,11 +83,8 @@ public class AuthenticationController {
                                 @RequestParam("messageKey" ) final Optional<String> messageKey,
                                 @RequestParam("expired" ) final Optional<String> expired,
                                 @RequestParam("token" ) final Optional<String> token) {
-
         Locale locale = request.getLocale();
-
         messageKey.ifPresent(key -> {
-
             String message = messages.getMessage(key, null, locale);
             model.addAttribute("message", message);
         });
@@ -174,13 +162,12 @@ public class AuthenticationController {
     }
 
     public void authWithoutPassword(User user) {
-
         List<Privilege> privileges = user.getRoles()
                 .stream()
                 .map(Role::getPrivileges)
                 .flatMap(Collection::stream)
                 .distinct()
-                .collect(Collectors.toList());
+                .toList();
 
         List<GrantedAuthority> authorities = privileges.stream()
                 .map(p -> new SimpleGrantedAuthority(p.getName()))
